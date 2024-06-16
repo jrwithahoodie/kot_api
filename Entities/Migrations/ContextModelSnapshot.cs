@@ -22,6 +22,79 @@ namespace Entities.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Entities.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Male"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Female"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Mini"
+                        });
+                });
+
+            modelBuilder.Entity("Entities.Entities.Edition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Editions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "27/08/2022"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "26/02/2023"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "05/08/2023"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "27/07/2024"
+                        });
+                });
+
             modelBuilder.Entity("Entities.Entities.Game", b =>
                 {
                     b.Property<int>("Id")
@@ -319,13 +392,16 @@ namespace Entities.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Classification_points")
                         .HasColumnType("int");
 
                     b.Property<int>("Defeats")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EditionId")
                         .HasColumnType("int");
 
                     b.Property<int>("GroupId")
@@ -345,6 +421,10 @@ namespace Entities.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("EditionId");
+
                     b.HasIndex("GroupId");
 
                     b.ToTable("Teams");
@@ -353,9 +433,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 1,
-                            Category = "Masculino",
+                            CategoryId = 1,
                             Classification_points = 0,
                             Defeats = 2,
+                            EditionId = 1,
                             GroupId = 1,
                             Name = "teamMasc1A",
                             Pay = false,
@@ -365,9 +446,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 2,
-                            Category = "Masculino",
+                            CategoryId = 1,
                             Classification_points = 3,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 1,
                             Name = "teamMasc2A",
                             Pay = false,
@@ -377,9 +459,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 3,
-                            Category = "Masculino",
+                            CategoryId = 1,
                             Classification_points = 3,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 1,
                             Name = "teamMasc3A",
                             Pay = false,
@@ -389,9 +472,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 4,
-                            Category = "Masculino",
+                            CategoryId = 1,
                             Classification_points = 0,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 2,
                             Name = "teamMasc1B",
                             Pay = false,
@@ -401,9 +485,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 5,
-                            Category = "Masculino",
+                            CategoryId = 1,
                             Classification_points = 0,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 2,
                             Name = "teamMasc2B",
                             Pay = false,
@@ -413,9 +498,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 6,
-                            Category = "Masculino",
+                            CategoryId = 1,
                             Classification_points = 0,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 2,
                             Name = "teamMasc3B",
                             Pay = false,
@@ -425,9 +511,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 7,
-                            Category = "Masculino",
+                            CategoryId = 1,
                             Classification_points = 0,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 3,
                             Name = "teamMasc1C",
                             Pay = false,
@@ -437,9 +524,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 8,
-                            Category = "Masculino",
+                            CategoryId = 1,
                             Classification_points = 0,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 3,
                             Name = "teamMasc2C",
                             Pay = false,
@@ -449,9 +537,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 9,
-                            Category = "Masculino",
+                            CategoryId = 1,
                             Classification_points = 0,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 3,
                             Name = "teamMasc3C",
                             Pay = false,
@@ -461,9 +550,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 10,
-                            Category = "Femenino",
+                            CategoryId = 2,
                             Classification_points = 0,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 4,
                             Name = "teamFem1A",
                             Pay = false,
@@ -473,9 +563,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 11,
-                            Category = "Femenino",
+                            CategoryId = 2,
                             Classification_points = 0,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 4,
                             Name = "teamFem2A",
                             Pay = false,
@@ -485,9 +576,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 12,
-                            Category = "Femenino",
+                            CategoryId = 2,
                             Classification_points = 0,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 5,
                             Name = "teamFem1B",
                             Pay = false,
@@ -497,9 +589,10 @@ namespace Entities.Migrations
                         new
                         {
                             Id = 13,
-                            Category = "Femenino",
+                            CategoryId = 2,
                             Classification_points = 0,
                             Defeats = 0,
+                            EditionId = 1,
                             GroupId = 5,
                             Name = "teamFem2B",
                             Pay = false,
@@ -604,11 +697,27 @@ namespace Entities.Migrations
 
             modelBuilder.Entity("Entities.Entities.Team", b =>
                 {
+                    b.HasOne("Entities.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Entities.Edition", "Edition")
+                        .WithMany()
+                        .HasForeignKey("EditionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entities.Entities.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Edition");
 
                     b.Navigation("Group");
                 });

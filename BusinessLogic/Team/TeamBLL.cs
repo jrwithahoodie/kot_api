@@ -34,6 +34,8 @@ namespace BusinessLogic.Team
         {
             var teamList = _context.Teams
                 .Include(t => t.Group)
+                .Include(e => e.Edition)
+                .Include(c => c.Category)
                 .OrderBy(t => t.Group.Id)
                 .OrderByDescending(c => c.Classification_points)
                 .OrderByDescending(ba => ba.Points_diff)
