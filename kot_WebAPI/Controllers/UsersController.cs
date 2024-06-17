@@ -27,10 +27,9 @@ namespace kot_WebAPI.Controllers
 
         #endregion
 
-
         // GET: api/<UsersController>
+        
         [HttpGet("getAllUsers")]
-        [Description("Enpoint that return a list of all users")]
         public IActionResult Get()
         {
             try

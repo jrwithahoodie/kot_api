@@ -3,6 +3,9 @@ using BusinessLogic.User;
 using BusinessLogic.Player;
 using BusinessLogic.Group;
 using BusinessLogic.Game;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +23,28 @@ builder.Services.AddScoped<IGameBll, GameBLL>();
 
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "KingOfTheTower3x3 Backend Management",
+        Description = "API REST on .NET 6 to manage different spaces of a basketball tournament",
+        Contact = new OpenApiContact
+        {
+            Name = "José Ramón",
+            Email = "jrgxllego@proton.me",
+            Url = new Uri("https://jrwithahoodie.github.io/react-portfolio-ui")
+        }
+    });
+
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
 var app = builder.Build();
 
@@ -31,7 +52,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "KingOfTheTower3x3 Backend Management API V1");
+        // c.RoutePrefix = string.Empty; // Accede a la UI de Swagger desde la raíz del sitio
+    });
 }
 
 app.UseAuthorization();
