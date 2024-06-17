@@ -11,23 +11,20 @@ namespace kot_WebAPI.Controllers
     public class TeamsController : ControllerBase
     {
         #region Fileds
-
         private readonly ITeamBll _teamsBll;
-
         #endregion
 
         #region Builder
-
         public TeamsController(ITeamBll teamsbll)
         {
             _teamsBll = teamsbll;
         }
-
         #endregion
-
-        // GET: api/<UsersController>
+        
+        /// <summary>
+        /// Get all teams information.
+        /// </summary>
         [HttpGet("getAllTeams")]
-        [Description("Enpoint that return a list with all teams")]
         public IActionResult Get()
         {
             try
@@ -42,9 +39,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // GET api/TeamsController>/5
+        /// <summary>
+        /// Get teams information by name.
+        /// </summary>
         [HttpGet("getTeamByName/{name}")]
-        [Description("Enpoint that return a team by the name")]
         public IActionResult Get(string name)
         {
             try
@@ -59,8 +57,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get classification information by group.
+        /// </summary>
         [HttpGet("getTeamClassByGroup/{groupName}")]
-        [Description("Enpoint that get the team classification by groups")]
         public IActionResult GetClassif(string groupName)
         {
             try
@@ -75,9 +75,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // GET api/TeamsController>/5
+        /// <summary>
+        /// Get teams information by group.
+        /// </summary>
         [HttpGet("getTeamByGroup/{groupName}")]
-        [Description("Enpoint that return a list of teams")]
         public IActionResult GetByGroup(string groupName)
         {
             try
@@ -92,9 +93,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // POST api/<TeamsController>
+        /// <summary>
+        /// Add new team.
+        /// </summary>
         [HttpPost("register")]
-        [Description("Enpoint that create a team")]
         public IActionResult Post([FromBody] Team value)
         {
             try
@@ -107,20 +109,6 @@ namespace kot_WebAPI.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-        }
-
-        // PUT api/<TeamsController>/5
-        [HttpPut("{id}")]
-        [Description("Enpoint that update team info")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<TeamsController>/5
-        [HttpDelete("{id}")]
-        [Description("Enpoint that delete a team")]
-        public void Delete(string name)
-        {
         }
     }
 }

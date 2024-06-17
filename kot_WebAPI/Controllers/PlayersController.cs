@@ -11,22 +11,21 @@ namespace kot_WebAPI.Controllers
     [ApiController]
     public class PlayersController : ControllerBase
     {
+        #region Fields
         private readonly IPlayerBll _playersBll;
+        #endregion
 
+        #region Builder
         public PlayersController(IPlayerBll playersBll)
         {
             _playersBll = playersBll;
         }
+        #endregion
 
         /// <summary>
-        /// Obtiene todos los jugadores.
+        /// Get all players information.
         /// </summary>
-        /// <remarks>
-        /// Ejemplo de uso:
-        /// GET /api/players/getAllPlayers
-        /// </remarks>
         [HttpGet("getAllPlayers")]
-        [Description("Endpoint que devuelve una lista con todos los jugadores.")]
         public IActionResult Get()
         {
             try
@@ -41,15 +40,10 @@ namespace kot_WebAPI.Controllers
         }
 
         /// <summary>
-        /// Obtiene un jugador por su NIF.
+        /// Get specific user information by NIF.
         /// </summary>
-        /// <param name="nif">NIF del jugador.</param>
-        /// <remarks>
-        /// Ejemplo de uso:
-        /// GET /api/players/getPlayerByNif/{nif}
-        /// </remarks>
+        /// <param name="nif">Player's NIF.</param>
         [HttpGet("getPlayerByNif/{nif}")]
-        [Description("Endpoint que devuelve un jugador por su NIF.")]
         public IActionResult Get(string nif)
         {
             try
@@ -67,15 +61,10 @@ namespace kot_WebAPI.Controllers
         }
 
         /// <summary>
-        /// Registra un nuevo jugador.
+        /// Add new player.
         /// </summary>
-        /// <param name="value">Datos del jugador a registrar.</param>
-        /// <remarks>
-        /// Ejemplo de uso:
-        /// POST /api/players/register
-        /// </remarks>
+        /// <param name="value">New player data.</param>
         [HttpPost("register")]
-        [Description("Endpoint que crea un nuevo jugador.")]
         public IActionResult Post([FromBody] Player value)
         {
             try
@@ -94,15 +83,10 @@ namespace kot_WebAPI.Controllers
         }
 
         /// <summary>
-        /// Registra varios jugadores simultáneamente.
+        /// Adding several players.
         /// </summary>
-        /// <param name="value">Lista de jugadores a registrar.</param>
-        /// <remarks>
-        /// Ejemplo de uso:
-        /// POST /api/players/registerSeveral
-        /// </remarks>
+        /// <param name="value">List of players to add.</param>
         [HttpPost("registerSeveral")]
-        [Description("Endpoint que crea varios jugadores simultáneamente.")]
         public IActionResult PostSeveral([FromBody] IEnumerable<Player> value)
         {
             try
@@ -113,53 +97,6 @@ namespace kot_WebAPI.Controllers
                 var result = _playersBll.PostSeveralPlayers(value);
 
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Actualiza la información de un jugador.
-        /// </summary>
-        /// <param name="id">ID del jugador a actualizar.</param>
-        /// <param name="value">Nuevos datos del jugador.</param>
-        /// <remarks>
-        /// Ejemplo de uso:
-        /// PUT /api/players/{id}
-        /// </remarks>
-        [HttpPut("{id}")]
-        [Description("Endpoint que actualiza la información de un jugador.")]
-        public IActionResult Put(int id, [FromBody] Player value)
-        {
-            try
-            {
-                // Implementa la lógica de actualización según tus necesidades
-                return Ok($"Jugador con ID {id} actualizado correctamente.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Elimina un jugador por su nombre.
-        /// </summary>
-        /// <param name="name">Nombre del jugador a eliminar.</param>
-        /// <remarks>
-        /// Ejemplo de uso:
-        /// DELETE /api/players/{name}
-        /// </remarks>
-        [HttpDelete("{name}")]
-        [Description("Endpoint que elimina un jugador por su nombre.")]
-        public IActionResult Delete(string name)
-        {
-            try
-            {
-                // Implementa la lógica de eliminación según tus necesidades
-                return Ok($"Jugador '{name}' eliminado correctamente.");
             }
             catch (Exception ex)
             {

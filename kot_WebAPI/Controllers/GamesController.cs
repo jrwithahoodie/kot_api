@@ -11,24 +11,20 @@ namespace kot_WebAPI.Controllers
     public class GamesController : ControllerBase
     {
         #region Fields
-
         private readonly IGameBll _gamesBll;
-
         #endregion
 
         #region Builder
-
         public GamesController(IGameBll gamesBll)
         {
             _gamesBll = gamesBll;
         }
-
         #endregion
 
-
-        // GET: api/<UsersController>
+        /// <summary>
+        /// Get all games information.
+        /// </summary>
         [HttpGet("getAllGames")]
-        [Description("Enpoint that return a list with all games")]
         public IActionResult Get()
         {
             try
@@ -43,9 +39,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // GET api/<UsersController>/5
+        /// <summary>
+        /// Get game information by id.
+        /// </summary>
         [HttpGet("getGameById/{id}")]
-        [Description("Enpoint that return a list with all games and filter it by the staff id")]
         public IActionResult Get(int id)
         {
             try
@@ -60,8 +57,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all games information by staff.
+        /// </summary>
         [HttpGet("getGameByStaff/{staffId}")]
-        [Description("Enpoint that return a list with all games and filter it by the staff id")]
         public IActionResult GetGetByStaff(int staffId)
         {
             try
@@ -76,9 +75,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // GET api/<UsersController>/5
+        /// <summary>
+        /// Get all games information by court.
+        /// </summary>
         [HttpGet("getGameByCourt/{court}")]
-        [Description("Enpoint that return a list with all games and filter it by the court")]
         public IActionResult GetGamesByCourt(int court)
         {
             try
@@ -93,9 +93,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // POST api/<UsersController>
+        /// <summary>
+        /// Add new game.
+        /// </summary>
         [HttpPost("register")]
-        [Description("Enpoint that receive a Game object and insert into our db")]
         public IActionResult Register([FromBody] Game value)
         {
             try
@@ -110,9 +111,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // PUT api/<UsersController>/5
+        /// <summary>
+        /// Update game scoring result.
+        /// </summary>
         [HttpPut("{id}/{score1}/{score2}")]
-        [Description("Enpoint that update a game with the id given and scores given on the request")]
         public IActionResult Put(int id, int score1, int score2)
         {
             try
@@ -127,9 +129,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // DELETE api/<UsersController>/5
+        /// <summary>
+        /// Delete game.
+        /// </summary>
         [HttpDelete("{id}")]
-        [Description("Enpoint that delete the game with an id")]
         public IActionResult Delete(int id)
         {
             try

@@ -13,22 +13,19 @@ namespace kot_WebAPI.Controllers
     public class UsersController : ControllerBase
     {
         #region Fields
-
         private readonly IUserBll _usersBll;
-
         #endregion
 
         #region Builder
-
-        public UsersController(IUserBll usersbll) 
+        public UsersController(IUserBll usersbll)
         {
             _usersBll = usersbll;
-        }    
-
+        }
         #endregion
 
-        // GET: api/<UsersController>
-        
+        /// <summary>
+        /// Get all users information.
+        /// </summary>
         [HttpGet("getAllUsers")]
         public IActionResult Get()
         {
@@ -43,9 +40,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // GET api/<UsersController>/5
+        /// <summary>
+        /// Get user information by email.
+        /// </summary>
         [HttpGet("getUserByEmail/{mail}")]
-        [Description("Enpoint that return a user by email")]
         public IActionResult Get(string mail)
         {
             try
@@ -56,12 +54,13 @@ namespace kot_WebAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
-            }            
+            }
         }
 
-        // GET api/<UsersController>/5
+        /// <summary>
+        /// Get all users information by role.
+        /// </summary>
         [HttpGet("getUserByRole/{role}")]
-        [Description("Enpoint that return a list of all users by role")]
         public IActionResult GetByRole(string role)
         {
             try
@@ -76,9 +75,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // POST api/<UsersController>
+        /// <summary>
+        /// New user register.
+        /// </summary>
         [HttpPost("register")]
-        [Description("Enpoint that create a user")]
         public IActionResult Register([FromBody] User value)
         {
             try
@@ -96,16 +96,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        [Description("Enpoint that update a user")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UsersController>/5
+        /// <summary>
+        /// Delete user by mail.
+        /// </summary>
         [HttpDelete("{mail}")]
-        [Description("Enpoint that delete a user by mail")]
         public IActionResult Delete(string mail)
         {
             try

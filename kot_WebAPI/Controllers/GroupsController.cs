@@ -11,23 +11,20 @@ namespace kot_WebAPI.Controllers
     public class GroupsController : ControllerBase
     {
         #region Fields
-
         private readonly IGroupBll _groupsBll;
-
         #endregion
 
         #region Builder
-
         public GroupsController(IGroupBll groupsBll)
         {
             _groupsBll = groupsBll;
         }
-
         #endregion
 
-        //GET: api/<GroupsController>
+        /// <summary>
+        /// Get all groups information.
+        /// </summary>
         [HttpGet("getAllGroups")]
-        [Description("Enpoint that return a list with all groups")]
         public IActionResult Get()
         {
             try
@@ -42,9 +39,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // GET api/<GroupsController>/5
+        /// <summary>
+        /// Get group information by name.
+        /// </summary>
         [HttpGet("getGroupByName/{name}")]
-        [Description("Enpoint that return a list with all groups by name")]
         public IActionResult Get(string name)
         {
             try
@@ -58,9 +56,10 @@ namespace kot_WebAPI.Controllers
             }
         }
 
-        // POST api/<GroupsController>
+        /// <summary>
+        /// Add new group.
+        /// </summary>
         [HttpPost("register")]
-        [Description("Enpoint that creates a new group")]
         public IActionResult Register([FromBody] Group value)
         {
             try
