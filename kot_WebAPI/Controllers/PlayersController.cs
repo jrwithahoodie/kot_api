@@ -25,8 +25,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get all players information.
         /// </summary>
-        [HttpGet("getAllPlayers")]
-        public IActionResult Get()
+        [HttpGet]
+        public IActionResult GetAllPlayers()
         {
             try
             {
@@ -43,8 +43,8 @@ namespace kot_WebAPI.Controllers
         /// Get specific user information by NIF.
         /// </summary>
         /// <param name="nif">Player's NIF.</param>
-        [HttpGet("getPlayerByNif/{nif}")]
-        public IActionResult Get(string nif)
+        [HttpGet("{nif}")]
+        public IActionResult GetPlayerByNif(string nif)
         {
             try
             {
@@ -64,8 +64,8 @@ namespace kot_WebAPI.Controllers
         /// Add new player.
         /// </summary>
         /// <param name="value">New player data.</param>
-        [HttpPost("register")]
-        public IActionResult Post([FromBody] Player value)
+        [HttpPost]
+        public IActionResult AddPlayer([FromBody] Player value)
         {
             try
             {
@@ -86,8 +86,8 @@ namespace kot_WebAPI.Controllers
         /// Adding several players.
         /// </summary>
         /// <param name="value">List of players to add.</param>
-        [HttpPost("registerSeveral")]
-        public IActionResult PostSeveral([FromBody] IEnumerable<Player> value)
+        [HttpPost("several")]
+        public IActionResult AddSeveralPlayers([FromBody] IEnumerable<Player> value)
         {
             try
             {

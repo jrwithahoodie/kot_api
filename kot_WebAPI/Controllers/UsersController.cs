@@ -26,8 +26,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get all users information.
         /// </summary>
-        [HttpGet("getAllUsers")]
-        public IActionResult Get()
+        [HttpGet]
+        public IActionResult GetAllUsers()
         {
             try
             {
@@ -43,8 +43,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get user information by email.
         /// </summary>
-        [HttpGet("getUserByEmail/{mail}")]
-        public IActionResult Get(string mail)
+        [HttpGet("{mail}")]
+        public IActionResult GetUserByEmail(string mail)
         {
             try
             {
@@ -60,8 +60,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get all users information by role.
         /// </summary>
-        [HttpGet("getUserByRole/{role}")]
-        public IActionResult GetByRole(string role)
+        [HttpGet("role/{role}")]
+        public IActionResult GetUsersByRole(string role)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// New user register.
         /// </summary>
-        [HttpPost("register")]
+        [HttpPost]
         public IActionResult Register([FromBody] User value)
         {
             try
@@ -100,7 +100,7 @@ namespace kot_WebAPI.Controllers
         /// Delete user by mail.
         /// </summary>
         [HttpDelete("{mail}")]
-        public IActionResult Delete(string mail)
+        public IActionResult DeleteUser(string mail)
         {
             try
             {

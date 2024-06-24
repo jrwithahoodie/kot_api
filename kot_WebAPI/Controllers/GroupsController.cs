@@ -24,8 +24,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get all groups information.
         /// </summary>
-        [HttpGet("getAllGroups")]
-        public IActionResult Get()
+        [HttpGet]
+        public IActionResult GetAllGroups()
         {
             try
             {
@@ -42,8 +42,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get group information by name.
         /// </summary>
-        [HttpGet("getGroupByName/{name}")]
-        public IActionResult Get(string name)
+        [HttpGet("{name}")]
+        public IActionResult GetGroupByName(string name)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Add new group.
         /// </summary>
-        [HttpPost("register")]
+        [HttpPost]
         public IActionResult Register([FromBody] Group value)
         {
             try

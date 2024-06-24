@@ -10,7 +10,7 @@ namespace kot_WebAPI.Controllers
     [ApiController]
     public class TeamsController : ControllerBase
     {
-        #region Fileds
+        #region Fields
         private readonly ITeamBll _teamsBll;
         #endregion
 
@@ -24,8 +24,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get all teams information.
         /// </summary>
-        [HttpGet("getAllTeams")]
-        public IActionResult Get()
+        [HttpGet]
+        public IActionResult GetAllTeams()
         {
             try
             {
@@ -42,8 +42,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get teams information by name.
         /// </summary>
-        [HttpGet("getTeamByName/{name}")]
-        public IActionResult Get(string name)
+        [HttpGet("{name}")]
+        public IActionResult GetTeamByName(string name)
         {
             try
             {
@@ -60,8 +60,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get classification information by group.
         /// </summary>
-        [HttpGet("getTeamClassByGroup/{groupName}")]
-        public IActionResult GetClassif(string groupName)
+        [HttpGet("group/{groupName}/classification")]
+        public IActionResult GetTeamClassByGroup(string groupName)
         {
             try
             {
@@ -78,8 +78,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get teams information by group.
         /// </summary>
-        [HttpGet("getTeamByGroup/{groupName}")]
-        public IActionResult GetByGroup(string groupName)
+        [HttpGet("group/{groupName}")]
+        public IActionResult GetTeamsByGroup(string groupName)
         {
             try
             {
@@ -96,8 +96,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Add new team.
         /// </summary>
-        [HttpPost("register")]
-        public IActionResult Post([FromBody] Team value)
+        [HttpPost]
+        public IActionResult AddTeam([FromBody] Team value)
         {
             try
             {

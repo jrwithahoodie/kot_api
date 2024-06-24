@@ -24,8 +24,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get all games information.
         /// </summary>
-        [HttpGet("getAllGames")]
-        public IActionResult Get()
+        [HttpGet]
+        public IActionResult GetAllGames()
         {
             try
             {
@@ -42,8 +42,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get game information by id.
         /// </summary>
-        [HttpGet("getGameById/{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("{id}")]
+        public IActionResult GetGameById(int id)
         {
             try
             {
@@ -60,8 +60,8 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get all games information by staff.
         /// </summary>
-        [HttpGet("getGameByStaff/{staffId}")]
-        public IActionResult GetGetByStaff(int staffId)
+        [HttpGet("{staffId}")]
+        public IActionResult GetGameByStaffId(int staffId)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get all games information by court.
         /// </summary>
-        [HttpGet("getGameByCourt/{court}")]
+        [HttpGet("{court}")]
         public IActionResult GetGamesByCourt(int court)
         {
             try
@@ -96,7 +96,7 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Add new game.
         /// </summary>
-        [HttpPost("register")]
+        [HttpPost]
         public IActionResult Register([FromBody] Game value)
         {
             try
