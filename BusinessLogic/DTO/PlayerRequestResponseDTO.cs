@@ -14,5 +14,7 @@ namespace BusinessLogic.DTO
         public string Instagram { get; set; }
         public bool WantPics { get; set; }
         public string TeamName { get; set; }
+        public string EditionName { get; set; }
+        public string CategoryName { get; set; }
     }
 }

@@ -25,6 +25,17 @@ namespace BusinessLogic.MappingProfiles
 
             CreateMap<TeamRequestResponseDTO, Entities.Entities.Team>();
             #endregion 
+        
+            #region Players mapping
+
+            CreateMap<Entities.Entities.Player, PlayerRequestResponseDTO>()
+                .ForMember(dest => dest.TeamName, opt => opt.MapFrom(src => src.Team.Name))
+                .ForMember(dest => dest.EditionName, opt => opt.MapFrom(src => src.Team.Edition.Name));
+            
+            CreateMap<PlayerRequestInputDTO, Entities.Entities.Player>()
+                .ForMember(dest => dest.Team, opt => opt.Ignore());
+
+            #endregion
         }
     }
 }
