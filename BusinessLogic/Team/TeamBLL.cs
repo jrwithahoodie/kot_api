@@ -45,21 +45,45 @@ namespace BusinessLogic.Team
 
         public IEnumerable<TeamRequestResponseDTO> GetClassif(string groupName)
         {
-            var teamList = _context.Teams.Where(t => t.Group.Name == groupName).OrderByDescending(c => c.Classification_points).ToList();
+            var teamList = _context.Teams
+                .Include(t => t.Edition)
+                .Include(t => t.Category)
+                .Where(t => t.Group.Name == groupName)
+                .OrderByDescending(c => c.Classification_points)
+                .ToList();
 
             return _mapper.Map<IEnumerable<TeamRequestResponseDTO>>(teamList);;
         }
 
         public TeamRequestResponseDTO Get(string name)
         {
-            var team = _context.Teams.Where(t => t.Name == name).FirstOrDefault();
+            try
+            {
+                if(string.IsNullOrEmpty(name))
+                    throw new ArgumentNullException("El nombre no puede ser nulo/vacío");
 
-            return _mapper.Map<TeamRequestResponseDTO>(team);
+                var team = _context.Teams
+                    .Include(t => t.Category)
+                    .Include(t => t.Edition)
+                    .Where(t => t.Name == name)
+                    .FirstOrDefault();
+                
+                return _mapper.Map<TeamRequestResponseDTO>(team);
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
         }
 
         public IEnumerable<TeamRequestResponseDTO> GetByGroup(string groupName)
         {
-            var teamList = _context.Teams.Where(g => g.Group.Name == groupName).AsNoTracking();
+            var teamList = _context.Teams
+                .Include(t => t.Edition)
+                .Include(t => t.Category)
+                .Where(g => g.Group.Name == groupName)
+                .AsNoTracking();
 
             return _mapper.Map<IEnumerable<TeamRequestResponseDTO>>(teamList);
         }
@@ -116,7 +140,6 @@ namespace BusinessLogic.Team
                 var m = ex.Message;
                 throw;
             }
-
         }
     }
 }
