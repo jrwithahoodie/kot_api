@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessLogic.DTO;
 
 namespace BusinessLogic.Player
 {
     public interface IPlayerBll
     {
-        IEnumerable<Entities.Entities.Player> Get();
+        IEnumerable<PlayerRequestResponseDTO> Get();
         Entities.Entities.Player Get(string nif);
-        Entities.Entities.Player Post(Entities.Entities.Player value);
+        Entities.Entities.Player Post(PlayerRequestInputDTO value);
         IEnumerable<Entities.Entities.Player> PostSeveralPlayers(IEnumerable<Entities.Entities.Player> value);
-        void Put(int id, string value);
-        void Delete(string nif);
     }
 }

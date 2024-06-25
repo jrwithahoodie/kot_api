@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Player;
+﻿using AutoMapper;
+using BusinessLogic.Player;
 using Entities.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,12 +14,14 @@ namespace kot_WebAPI.Controllers
     {
         #region Fields
         private readonly IPlayerBll _playersBll;
+        private readonly IMapper _mapper;
         #endregion
 
         #region Builder
-        public PlayersController(IPlayerBll playersBll)
+        public PlayersController(IPlayerBll playersBll, IMapper mapper)
         {
             _playersBll = playersBll;
+            _mapper = mapper;
         }
         #endregion
 

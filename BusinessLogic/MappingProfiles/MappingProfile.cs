@@ -30,7 +30,8 @@ namespace BusinessLogic.MappingProfiles
 
             CreateMap<Entities.Entities.Player, PlayerRequestResponseDTO>()
                 .ForMember(dest => dest.TeamName, opt => opt.MapFrom(src => src.Team.Name))
-                .ForMember(dest => dest.EditionName, opt => opt.MapFrom(src => src.Team.Edition.Name));
+                .ForMember(dest => dest.EditionName, opt => opt.MapFrom(src => src.Team.Edition.Name))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Team.Category.Name));
             
             CreateMap<PlayerRequestInputDTO, Entities.Entities.Player>()
                 .ForMember(dest => dest.Team, opt => opt.Ignore());

@@ -1,4 +1,6 @@
-﻿using Azure.Core;
+﻿using AutoMapper;
+using Azure.Core;
+using BusinessLogic.DTO;
 using Entities.AppContext;
 using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -18,27 +20,29 @@ namespace BusinessLogic.Player
         #region Fields
 
         private readonly Context _context;
+        private readonly IMapper _mapper;
 
         #endregion
 
         #region Builder
 
-        public PlayerBLL()
+        public PlayerBLL(IMapper mapper)
         {
             _context = new Context();
+            _mapper = mapper;
         }
 
         #endregion
-        public void Delete(string nif)
-        {
-            throw new NotImplementedException();
-        }
 
-        public IEnumerable<Entities.Entities.Player> Get()
+        public IEnumerable<PlayerRequestResponseDTO> Get()
         {
-            var playerList = _context.Players.ToList();
+            var playerList = _context.Players
+                .Include(p => p.Team)
+                .Include(p => p.Team.Edition)
+                .Include(p => p.Team.Category)
+                .ToList();
 
-            return playerList;
+            return _mapper.Map<IEnumerable<PlayerRequestResponseDTO>>(playerList);
         }
 
         public Entities.Entities.Player Get(string nif)
@@ -48,19 +52,19 @@ namespace BusinessLogic.Player
             return player;
         }
 
-        public Entities.Entities.Player Post(Entities.Entities.Player value)
+        public Entities.Entities.Player Post(PlayerRequestInputDTO newPlayerData)
         {
             try
             {
-                if (string.IsNullOrEmpty(value.NIF))
+                if (string.IsNullOrEmpty(newPlayerData.NIF))
                     throw new Exception("El DNI del jugador no puede ser nulo/vacio:");
 
-                if (!Regex.IsMatch(value.NIF, @"^[XYZ]?\d{7,8}[A-Z]$"))
+                if (!Regex.IsMatch(newPlayerData.NIF, @"^[XYZ]?\d{7,8}[A-Z]$"))
                     throw new Exception("El formato del DNI no es correcto.");
 
-                // Guardamos el jugador:
-                var result = _context.Players.Add(value);             
-                _context.SaveChanges();
+                var newPlayer = _mapper.Map<Entities.Entities.Player>(newPlayerData);
+
+                newPlayer.
 
                 return result.Entity;
             }
@@ -131,11 +135,6 @@ namespace BusinessLogic.Player
                 var m = ex.Message;
                 throw;
             }
-        }
-
-        public void Put(int id, string value)
-        {
-            throw new NotImplementedException();
         }
     }
 }
