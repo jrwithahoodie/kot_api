@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.DTO
 {
-    public class NewTeamDTO
+    public class CreateUserDTO
     {
         public string Name { get; set; }
-        public int EditionId { get; set; }
-        public int CategoryId { get; set; }
-        public bool Payed { get; set; }
-
+        public string Mail { get; set; }
+        public string Role { get; set; }
     }
 }

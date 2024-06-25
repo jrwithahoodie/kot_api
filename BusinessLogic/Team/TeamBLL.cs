@@ -1,5 +1,7 @@
-﻿using Entities.AppContext;
+﻿using BusinessLogic.DTO;
+using Entities.AppContext;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,24 +15,21 @@ namespace BusinessLogic.Team
         #region Fields
 
         private readonly Context _context;
+        private readonly IMapper _mapper;
 
         #endregion
 
         #region Builder
 
-        public TeamBLL()
+        public TeamBLL(IMapper mapper)
         {
             _context = new Context();
+            _mapper = mapper;
         }
 
         #endregion
 
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Entities.Entities.Team> Get()
+        public IEnumerable<TeamRequestResponseDTO> Get()
         {
             var teamList = _context.Teams
                 .Include(t => t.Group)
@@ -41,51 +40,75 @@ namespace BusinessLogic.Team
                 .OrderByDescending(ba => ba.Points_diff)
                 .ToList();
 
-            return teamList;
+            return _mapper.Map<IEnumerable<TeamRequestResponseDTO>>(teamList);
         }
 
-        public IEnumerable<Entities.Entities.Team> GetClassif(string groupName)
+        public IEnumerable<TeamRequestResponseDTO> GetClassif(string groupName)
         {
             var teamList = _context.Teams.Where(t => t.Group.Name == groupName).OrderByDescending(c => c.Classification_points).ToList();
 
-            return teamList;
+            return _mapper.Map<IEnumerable<TeamRequestResponseDTO>>(teamList);;
         }
 
-        public Entities.Entities.Team Get(string name)
+        public TeamRequestResponseDTO Get(string name)
         {
             var team = _context.Teams.Where(t => t.Name == name).FirstOrDefault();
 
-            return team;
+            return _mapper.Map<TeamRequestResponseDTO>(team);
         }
 
-        public IEnumerable<Entities.Entities.Team> GetByGroup(string groupName)
+        public IEnumerable<TeamRequestResponseDTO> GetByGroup(string groupName)
         {
-            var teams = _context.Teams.Where(g => g.Group.Name == groupName).AsNoTracking();
+            var teamList = _context.Teams.Where(g => g.Group.Name == groupName).AsNoTracking();
 
-            return teams;
+            return _mapper.Map<IEnumerable<TeamRequestResponseDTO>>(teamList);
         }
 
-        public Entities.Entities.Team Post(Entities.Entities.Team value)
+        public TeamRequestResponseDTO Post(TeamRequestInputDTO newTeamData)
         {
             try
             {
-                if (string.IsNullOrEmpty(value.Name))
+                if (string.IsNullOrEmpty(newTeamData.Name))
                     throw new Exception("El nombre del equipo no puede ser nulo/vacío");
 
-                var team = _context.Teams
-                    .Where(t => t.Name == value.Name)
-                    .AsNoTracking()
-                    .ToList().FirstOrDefault();
-
-                if (team == null)
+                var existingTeam = _context.Teams
+                    .Where(t => t.Name == newTeamData.Name)
+                    .ToList()
+                    .FirstOrDefault();
+                
+                if(existingTeam == null)
                 {
-                    var result = _context.Teams.Add(value);
+                    var newTeam = _mapper.Map<Entities.Entities.Team>(newTeamData);
+
+                    newTeam.Wins = 0;
+                    newTeam.Defeats = 0;
+                    newTeam.Points_diff = 0;
+                    newTeam.Classification_points = 0;
+
+                    newTeam.EditionId = 2;
+                    newTeam.GroupId = 1;
+
+                    var category = _context.Categories
+                        .Where(c => c.Name == newTeamData.CategoryName)
+                        .ToList()
+                        .FirstOrDefault();
+                    if (category == null)
+                    {
+                        throw new Exception("La categoría especificada no existe");
+                    }
+                    else
+                    {
+                        newTeam.CategoryId = category.Id;
+                    }
+
+                    var result = _context.Teams.Add(newTeam);
                     _context.SaveChanges();
-                    return result.Entity;
+
+                    return _mapper.Map<TeamRequestResponseDTO>(result.Entity);
                 }
                 else
                 {
-                    return team;
+                    return _mapper.Map<TeamRequestResponseDTO>(existingTeam);
                 }
             }
             catch (Exception ex)
@@ -94,11 +117,6 @@ namespace BusinessLogic.Team
                 throw;
             }
 
-        }
-
-        public void Put(int id, string value)
-        {
-            throw new NotImplementedException();
         }
     }
 }

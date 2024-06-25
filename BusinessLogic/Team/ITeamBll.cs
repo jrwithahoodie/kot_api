@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessLogic.DTO;
 
 namespace BusinessLogic.Team
 {
     public interface ITeamBll
     {
-        IEnumerable<Entities.Entities.Team> Get();
-        Entities.Entities.Team Get(string name);
-        IEnumerable<Entities.Entities.Team> GetClassif(string groupName);
-        IEnumerable<Entities.Entities.Team> GetByGroup(string groupName);
-        Entities.Entities.Team Post(Entities.Entities.Team value);
-        void Put(int id, string value);
-        void Delete(int id);
+        IEnumerable<TeamRequestResponseDTO> Get();
+        TeamRequestResponseDTO Get(string name);
+        IEnumerable<TeamRequestResponseDTO> GetClassif(string groupName);
+        IEnumerable<TeamRequestResponseDTO> GetByGroup(string groupName);
+        TeamRequestResponseDTO Post(TeamRequestInputDTO newTeamData);
     }
 }

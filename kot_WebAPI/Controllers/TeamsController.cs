@@ -1,4 +1,6 @@
-﻿using BusinessLogic.Team;
+﻿using AutoMapper;
+using BusinessLogic.DTO;
+using BusinessLogic.Team;
 using BusinessLogic.User;
 using Entities.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +14,14 @@ namespace kot_WebAPI.Controllers
     {
         #region Fields
         private readonly ITeamBll _teamsBll;
+        private readonly IMapper _mapper;
         #endregion
 
         #region Builder
-        public TeamsController(ITeamBll teamsbll)
+        public TeamsController(ITeamBll teamsbll, IMapper mapper)
         {
             _teamsBll = teamsbll;
+            _mapper = mapper;
         }
         #endregion
         
@@ -97,7 +101,7 @@ namespace kot_WebAPI.Controllers
         /// Add new team.
         /// </summary>
         [HttpPost]
-        public IActionResult AddTeam([FromBody] Team value)
+        public IActionResult AddTeam([FromBody] TeamRequestInputDTO value)
         {
             try
             {
