@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using BusinessLogic.MappingProfiles;
+using BusinessLogic.Edition;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddScoped<ITeamBll, TeamBLL>();
 builder.Services.AddScoped<IPlayerBll, PlayerBLL>();
 builder.Services.AddScoped<IGroupBll, GroupBLL>();
 builder.Services.AddScoped<IGameBll, GameBLL>();
+builder.Services.AddScoped<IEditionBll, EditionBLL>();
 
 #endregion
 
