@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using BusinessLogic.MappingProfiles;
 using BusinessLogic.Edition;
+using BusinessLogic.Category;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IPlayerBll, PlayerBLL>();
 builder.Services.AddScoped<IGroupBll, GroupBLL>();
 builder.Services.AddScoped<IGameBll, GameBLL>();
 builder.Services.AddScoped<IEditionBll, EditionBLL>();
+builder.Services.AddScoped<ICategoryBll, CategoryBLL>();
 
 #endregion
 
