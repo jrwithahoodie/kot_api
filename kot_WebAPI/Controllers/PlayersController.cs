@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLogic.DTO;
 using BusinessLogic.Player;
 using Entities.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -68,7 +69,7 @@ namespace kot_WebAPI.Controllers
         /// </summary>
         /// <param name="value">New player data.</param>
         [HttpPost]
-        public IActionResult AddPlayer([FromBody] Player value)
+        public IActionResult AddPlayer([FromBody] PlayerRequestInputDTO value)
         {
             try
             {

@@ -11,7 +11,7 @@ namespace BusinessLogic.Player
     {
         IEnumerable<PlayerRequestResponseDTO> Get();
         Entities.Entities.Player Get(string nif);
-        Entities.Entities.Player Post(PlayerRequestInputDTO value);
+        PlayerRequestResponseDTO Post(PlayerRequestInputDTO value);
         IEnumerable<Entities.Entities.Player> PostSeveralPlayers(IEnumerable<Entities.Entities.Player> value);
     }
 }

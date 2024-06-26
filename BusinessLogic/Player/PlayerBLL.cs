@@ -52,7 +52,7 @@ namespace BusinessLogic.Player
             return player;
         }
 
-        public Entities.Entities.Player Post(PlayerRequestInputDTO newPlayerData)
+        public PlayerRequestResponseDTO Post(PlayerRequestInputDTO newPlayerData)
         {
             try
             {
@@ -64,9 +64,21 @@ namespace BusinessLogic.Player
 
                 var newPlayer = _mapper.Map<Entities.Entities.Player>(newPlayerData);
 
-                newPlayer.
+                var newPlayerTeam = _context.Teams
+                    .Where(t => t.Name == newPlayerData.TeamName)
+                    .ToList()
+                    .FirstOrDefault();
 
-                return result.Entity;
+                if (newPlayerTeam == null)
+                    throw new Exception("Este equipo no existe");
+
+                newPlayer.TeamId = newPlayerTeam.Id;
+                newPlayer.Team = newPlayerTeam;
+
+                var result = _context.Players.Add(newPlayer);
+                _context.SaveChanges();
+
+                return _mapper.Map<PlayerRequestResponseDTO>(result.Entity);
             }
             catch (Exception ex)
             {

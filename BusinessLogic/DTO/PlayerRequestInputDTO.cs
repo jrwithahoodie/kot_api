@@ -12,6 +12,6 @@ namespace BusinessLogic.DTO
         public string Phone {get; set;}
         public string Instagram {get; set;}
         public bool WantPics {get; set;}
-        public bool TeamName 
+        public string TeamName {get; set;}
     }
 }

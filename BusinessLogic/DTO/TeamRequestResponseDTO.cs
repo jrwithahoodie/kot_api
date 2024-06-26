@@ -16,5 +16,6 @@ namespace BusinessLogic.DTO
         public int Points_diff { get; set; }
         public string EditionName { get; set; }
         public string CategoryName { get; set; }
+        public List<PlayerRequestResponseDTO>? TeamPlayers { get; set; }
     }
 }
