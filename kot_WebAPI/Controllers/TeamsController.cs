@@ -51,7 +51,7 @@ namespace kot_WebAPI.Controllers
         {
             try
             {
-                var team = _teamsBll.Get(name);
+                var team = _teamsBll.GetByName(name);
 
                 return Ok(team);
             }
@@ -97,15 +97,69 @@ namespace kot_WebAPI.Controllers
             }
         }
 
+        ///<summary>
+        ///Get teams information by edition.
+        ///</summary>
+        [HttpGet("group/edition/{edition}")]
+        public IActionResult GetTeamsByEdition(string edition)
+        {
+            try
+            {
+                var teams = _teamsBll.GetByEdition(edition);
+
+                return Ok(teams);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+        ///<summary>
+        ///Get teams information by category.
+        ///</summary>
+        [HttpGet("group/category/{category}")]
+        public IActionResult GetTeamsByCategory(string category)
+        {
+            try
+            {
+                var teams = _teamsBll.GetByCategory(category);
+
+                return Ok(teams);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
         /// <summary>
         /// Add new team.
         /// </summary>
-        [HttpPost]
+        [HttpPost("new")]
         public IActionResult AddTeam([FromBody] TeamRequestInputDTO value)
         {
             try
             {
                 var result = _teamsBll.Post(value);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Add new team with players
+        /// </summary>
+        [HttpPost("new/players")]
+        public IActionResult AddTeamWithPlayers([FromBody] TeamWithPlayersRequestInputDTO value)
+        {
+            try
+            {
+                var result = _teamsBll.PostWithPlayers(value);
 
                 return Ok(result);
             }

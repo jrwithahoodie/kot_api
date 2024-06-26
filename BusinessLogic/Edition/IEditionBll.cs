@@ -9,5 +9,6 @@ namespace BusinessLogic.Edition
     {
         IEnumerable<Entities.Entities.Edition> Get();
         Entities.Entities.Edition Post(Entities.Entities.Edition newEditionData);
+        Entities.Entities.Edition Update(string editionName);
     }
 }

@@ -45,7 +45,7 @@ namespace Entities.AppContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Constraints
-            modelBuilder.Entity<Player>().HasIndex(p => p.NIF).IsUnique();
+            // modelBuilder.Entity<Player>().HasIndex(p => p.NIF).IsUnique();
             modelBuilder.Entity<User>().HasIndex(u => u.Mail).IsUnique();
 
             modelBuilder.Entity<Game>(entry => { entry.ToTable("Games", tb => tb.HasTrigger("T_update_game")); });
@@ -61,10 +61,10 @@ namespace Entities.AppContext
 
             #region Editions default values
             
-            var edit1 = new Edition() { Id = 1, Name = "27/08/2022" };
-            var edit2 = new Edition() { Id = 2, Name = "26/02/2023" };
-            var edit3 = new Edition() { Id = 3, Name = "05/08/2023"};
-            var edit4 = new Edition() { Id = 4, Name = "27/07/2024"};
+            var edit1 = new Edition() { Id = 1, Name = "27082022", IsActive = false };
+            var edit2 = new Edition() { Id = 2, Name = "26022023", IsActive = false };
+            var edit3 = new Edition() { Id = 3, Name = "05082023", IsActive = false};
+            var edit4 = new Edition() { Id = 4, Name = "27072024", IsActive = true};
 
             #endregion
 

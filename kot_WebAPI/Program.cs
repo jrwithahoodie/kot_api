@@ -47,7 +47,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 });
 
@@ -60,7 +60,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "KingOfTheTower3x3 Backend Management API V1");
-        // c.RoutePrefix = string.Empty; // Accede a la UI de Swagger desde la raíz del sitio
     });
 }
 

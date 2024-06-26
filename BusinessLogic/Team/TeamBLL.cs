@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace BusinessLogic.Team
 {
@@ -55,6 +56,7 @@ namespace BusinessLogic.Team
 
             return teamListMapped;
         }
+        
         public IEnumerable<TeamRequestResponseDTO> GetClassif(string groupName)
         {
             var teamList = _context.Teams
@@ -79,7 +81,8 @@ namespace BusinessLogic.Team
 
             return teamListMapped;
         }
-        public TeamRequestResponseDTO Get(string name)
+        
+        public TeamRequestResponseDTO GetByName(string name)
         {
             try
             {
@@ -107,6 +110,7 @@ namespace BusinessLogic.Team
                 throw;
             }
         }
+        
         public IEnumerable<TeamRequestResponseDTO> GetByGroup(string groupName)
         {
             var teamList = _context.Teams
@@ -117,6 +121,51 @@ namespace BusinessLogic.Team
 
             return _mapper.Map<IEnumerable<TeamRequestResponseDTO>>(teamList);
         }
+
+        public IEnumerable<TeamRequestResponseDTO> GetByEdition(string edition)
+        {
+            try
+            {
+                if(string.IsNullOrEmpty(edition))
+                    throw new Exception("El nombre de la edición no puede ser nulo/vacío");
+                
+                var teamList = _context.Teams
+                    .Include(t => t.Edition)
+                    .Include(t => t.Category)
+                    .Where(t => t.Edition.Name == edition)
+                    .ToList();
+                
+                return _mapper.Map<IEnumerable<TeamRequestResponseDTO>>(teamList);
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+        
+        public IEnumerable<TeamRequestResponseDTO> GetByCategory(string category)
+        {
+            try
+            {
+                if(string.IsNullOrEmpty(category))
+                    throw new Exception("El nombre de la categoría no puede ser nulo/vacío");
+                
+                var teamList = _context.Teams
+                    .Include(t => t.Edition)
+                    .Include(t => t.Category)
+                    .Where(t => t.Category.Name == category)
+                    .ToList();
+                
+                return _mapper.Map<IEnumerable<TeamRequestResponseDTO>>(teamList);
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+        
         public TeamRequestResponseDTO Post(TeamRequestInputDTO newTeamData)
         {
             try
@@ -158,6 +207,65 @@ namespace BusinessLogic.Team
                     _context.SaveChanges();
 
                     return _mapper.Map<TeamRequestResponseDTO>(result.Entity);
+                }
+                else
+                {
+                    return _mapper.Map<TeamRequestResponseDTO>(existingTeam);
+                }
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+
+        public TeamRequestResponseDTO PostWithPlayers(TeamWithPlayersRequestInputDTO newTeamWithPlayersData)
+        {
+            try
+            {
+                if(string.IsNullOrEmpty(newTeamWithPlayersData.Name))
+                    throw new Exception("El nombre del equipo no puede ser nulo/vacío");
+                
+                var existingTeam = _context.Teams
+                    .Where(t => t.Name == newTeamWithPlayersData.Name)
+                    .ToList()
+                    .FirstOrDefault();
+                
+                if(existingTeam == null)
+                {
+                    var newTeam = _mapper.Map<Entities.Entities.Team>(newTeamWithPlayersData);
+
+                    newTeam.Wins = 0;
+                    newTeam.Defeats = 0;
+                    newTeam.Points_diff = 0;
+                    newTeam.Classification_points = 0;
+
+                    var category = _context.Categories
+                        .Where(c => c.Name == newTeamWithPlayersData.CategoryName)
+                        .ToList()
+                        .FirstOrDefault();
+                    
+                    if(category == null)
+                        throw new Exception("La categoría seleccionada no existe");
+                    
+                    newTeam.CategoryId = category.Id;
+
+                    var newTeamAux = _context.Teams.Add(newTeam);
+                    var newTeamResult = newTeamAux.Entity;
+
+                    if(newTeamWithPlayersData.PlayerList == null || newTeamWithPlayersData.PlayerList.Count == 0)
+                        throw new Exception("No se han introducido los datos de los jugadores");
+                    
+                    if(newTeamWithPlayersData.PlayerList.Count < 3 || newTeamWithPlayersData.PlayerList.Count > 4)
+                        throw new Exception ("El número de jugadores es incorrecto");
+                    
+                    var players = _mapper.Map<List<Entities.Entities.Player>>(newTeamWithPlayersData.PlayerList);
+                    players.ForEach(p => p.TeamId = newTeam.Id);
+                    _context.Players.AddRange(players);
+                    _context.SaveChanges();
+
+                    return _mapper.Map<TeamRequestResponseDTO>(newTeam);
                 }
                 else
                 {

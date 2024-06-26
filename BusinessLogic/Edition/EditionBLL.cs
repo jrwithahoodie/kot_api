@@ -56,5 +56,34 @@ namespace BusinessLogic.Edition
                 throw;
             }
         }
+
+        public Entities.Entities.Edition Update(string editionName)
+        {
+            try
+            {
+                if(string.IsNullOrEmpty(editionName))
+                    throw new Exception("El nombre de la edición no puede ser nulo/vacío");
+
+                var edition = _context.Editions
+                    .Where(e => e.Name == editionName)
+                    .ToList()
+                    .FirstOrDefault();
+                
+                if(edition == null)
+                    throw new Exception("No existe ninguna edición con el nombre indicado");
+
+                edition.IsActive = !edition.IsActive;
+
+                var result =_context.Update(edition);
+                _context.SaveChanges();
+
+                return result.Entity;
+            }
+            catch (Exception ex)
+            {
+                var m  = ex.Message;
+                throw;
+            }
+        }
     }
 }

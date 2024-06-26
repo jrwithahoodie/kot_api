@@ -10,9 +10,12 @@ namespace BusinessLogic.Team
     public interface ITeamBll
     {
         IEnumerable<TeamRequestResponseDTO> Get();
-        TeamRequestResponseDTO Get(string name);
+        TeamRequestResponseDTO GetByName(string name);
         IEnumerable<TeamRequestResponseDTO> GetClassif(string groupName);
         IEnumerable<TeamRequestResponseDTO> GetByGroup(string groupName);
+        IEnumerable<TeamRequestResponseDTO> GetByEdition(string edition);
+        IEnumerable<TeamRequestResponseDTO> GetByCategory(string category);
         TeamRequestResponseDTO Post(TeamRequestInputDTO newTeamData);
+        TeamRequestResponseDTO PostWithPlayers(TeamWithPlayersRequestInputDTO newTeamWithPlayersData);
     }
 }

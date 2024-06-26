@@ -57,5 +57,20 @@ namespace kot_WebAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+    
+        [HttpPut("{edition}/alter")]
+        public IActionResult AlterEdition(string edition)
+        {
+            try
+            {
+                var result = _editionBll.Update(edition);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

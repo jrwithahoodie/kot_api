@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Entities
 {
-    [Index(nameof(NIF), IsUnique = true)]
+    // [Index(nameof(NIF), IsUnique = true)]
     public class Player
     {
         [Key]
