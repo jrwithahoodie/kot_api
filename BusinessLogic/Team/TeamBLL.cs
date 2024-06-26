@@ -39,10 +39,22 @@ namespace BusinessLogic.Team
                 .OrderByDescending(c => c.Classification_points)
                 .OrderByDescending(ba => ba.Points_diff)
                 .ToList();
+            
+            var playersByTeam = _context.Players
+                .GroupBy(p => p.TeamId)
+                .ToDictionary(g => g.Key, g => g.ToList());
 
-            return _mapper.Map<IEnumerable<TeamRequestResponseDTO>>(teamList);
+            var teamListMapped = teamList.Select(t =>{
+                var teamDto = _mapper.Map<TeamRequestResponseDTO>(t);
+                teamDto.TeamPlayers = playersByTeam.ContainsKey(t.Id)
+                    ? _mapper.Map<List<PlayerRequestResponseDTO>>(playersByTeam[t.Id])
+                    : new List<PlayerRequestResponseDTO>();
+
+                return teamDto;
+            });
+
+            return teamListMapped;
         }
-
         public IEnumerable<TeamRequestResponseDTO> GetClassif(string groupName)
         {
             var teamList = _context.Teams
@@ -52,9 +64,21 @@ namespace BusinessLogic.Team
                 .OrderByDescending(c => c.Classification_points)
                 .ToList();
 
-            return _mapper.Map<IEnumerable<TeamRequestResponseDTO>>(teamList);;
-        }
+            var playersByTeam = _context.Players
+                .GroupBy(p => p.TeamId)
+                .ToDictionary(g => g.Key, g => g.ToList());
 
+            var teamListMapped = teamList.Select(t =>{
+                var teamDto = _mapper.Map<TeamRequestResponseDTO>(t);
+                teamDto.TeamPlayers = playersByTeam.ContainsKey(t.Id)
+                    ? _mapper.Map<List<PlayerRequestResponseDTO>>(playersByTeam[t.Id])
+                    : new List<PlayerRequestResponseDTO>();
+
+                return teamDto;
+            });
+
+            return teamListMapped;
+        }
         public TeamRequestResponseDTO Get(string name)
         {
             try
@@ -68,7 +92,14 @@ namespace BusinessLogic.Team
                     .Where(t => t.Name == name)
                     .FirstOrDefault();
                 
-                return _mapper.Map<TeamRequestResponseDTO>(team);
+                var teamPlayers = _context.Players
+                    .Where(p => p.TeamId == team.Id)
+                    .ToList();
+
+                var teamDto = _mapper.Map<TeamRequestResponseDTO>(team);
+                teamDto.TeamPlayers = _mapper.Map<List<PlayerRequestResponseDTO>>(teamPlayers);
+
+                return teamDto;
             }
             catch (Exception ex)
             {
@@ -76,7 +107,6 @@ namespace BusinessLogic.Team
                 throw;
             }
         }
-
         public IEnumerable<TeamRequestResponseDTO> GetByGroup(string groupName)
         {
             var teamList = _context.Teams
@@ -87,7 +117,6 @@ namespace BusinessLogic.Team
 
             return _mapper.Map<IEnumerable<TeamRequestResponseDTO>>(teamList);
         }
-
         public TeamRequestResponseDTO Post(TeamRequestInputDTO newTeamData)
         {
             try

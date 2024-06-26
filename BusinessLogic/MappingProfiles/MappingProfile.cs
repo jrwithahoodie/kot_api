@@ -11,7 +11,8 @@ namespace BusinessLogic.MappingProfiles
             #region Teams mapping
             CreateMap<Entities.Entities.Team, TeamRequestResponseDTO>()
                 .ForMember(dest => dest.EditionName, opt => opt.MapFrom(src => src.Edition.Name))
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+                .ForMember(dest => dest.TeamPlayers, opt => opt.Ignore());
 
             CreateMap<TeamRequestInputDTO, Entities.Entities.Team>()
                 .ForMember(dest => dest.Category, opt => opt.Ignore())
