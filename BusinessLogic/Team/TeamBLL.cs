@@ -260,8 +260,13 @@ namespace BusinessLogic.Team
                         throw new Exception("La categoría seleccionada no existe");
                     
                     newTeam.CategoryId = category.Id;
+                    //FUEGO
+                    newTeam.GroupId = 1;
+                    //FUEGO
+                    newTeam.EditionId = 4;
 
                     var newTeamAux = _context.Teams.Add(newTeam);
+                    _context.SaveChanges();
                     var newTeamResult = newTeamAux.Entity;
 
                     if(newTeamWithPlayersData.PlayerList == null || newTeamWithPlayersData.PlayerList.Count == 0)
@@ -271,7 +276,7 @@ namespace BusinessLogic.Team
                         throw new Exception ("El número de jugadores es incorrecto");
                     
                     var players = _mapper.Map<List<Entities.Entities.Player>>(newTeamWithPlayersData.PlayerList);
-                    players.ForEach(p => p.TeamId = newTeam.Id);
+                    players.ForEach(p => p.TeamId = newTeamResult.Id);
                     _context.Players.AddRange(players);
                     _context.SaveChanges();
 

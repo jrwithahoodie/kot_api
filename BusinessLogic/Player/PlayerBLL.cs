@@ -145,10 +145,8 @@ namespace BusinessLogic.Player
                 var newPlayerTeam = _context.Teams
                     .Where(t => t.Name == newPlayerData.TeamName)
                     .ToList()
-                    .FirstOrDefault();
-
-                if (newPlayerTeam == null)
-                    throw new Exception("Este equipo no existe");
+                    .FirstOrDefault()
+                        ?? throw new Exception("Este equipo no existe");
 
                 newPlayer.TeamId = newPlayerTeam.Id;
                 newPlayer.Team = newPlayerTeam;
@@ -226,5 +224,6 @@ namespace BusinessLogic.Player
                 throw;
             }
         }
+
     }
 }

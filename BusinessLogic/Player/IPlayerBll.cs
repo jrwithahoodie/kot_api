@@ -16,5 +16,6 @@ namespace BusinessLogic.Player
         IEnumerable<PlayerRequestResponseDTO> GetByTeam(string team);
         PlayerRequestResponseDTO Post(PlayerRequestInputDTO value);
         IEnumerable<Entities.Entities.Player> PostSeveralPlayers(IEnumerable<Entities.Entities.Player> value);
+        // PlayerRequestResponseDTO UpdatePlayer (PlayerRequestInputDTO playerInfo);
     }
 }

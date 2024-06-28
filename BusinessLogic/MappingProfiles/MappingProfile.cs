@@ -48,6 +48,9 @@ namespace BusinessLogic.MappingProfiles
             
             CreateMap<PlayerRequestInputDTO, Entities.Entities.Player>()
                 .ForMember(dest => dest.Team, opt => opt.Ignore());
+
+            CreateMap<PlayerInTeamRequestInputDTO, Entities.Entities.Player>()
+                .ForMember(dest => dest.Team, opt => opt.Ignore());
             #endregion
         }
     }
