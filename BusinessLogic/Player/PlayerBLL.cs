@@ -45,11 +45,89 @@ namespace BusinessLogic.Player
             return _mapper.Map<IEnumerable<PlayerRequestResponseDTO>>(playerList);
         }
 
-        public Entities.Entities.Player Get(string nif)
+        public Entities.Entities.Player GetByNif(string nif)
         {
             var player = _context.Players.Where( p => p.NIF == nif ).ToList().FirstOrDefault();
 
             return player;
+        }
+
+        public IEnumerable<PlayerRequestResponseDTO> GetByCategory(string categoryName)
+        {
+            try
+            {
+                var existingCategory = _context.Categories
+                    .Where(c => c.Name == categoryName)
+                    .ToList()
+                    .FirstOrDefault()
+                    ?? throw new Exception($"No existe ninguna categoría '{categoryName}' en la base de datos.");
+
+                var playerList = _context.Players
+                    .Include(p => p.Team)
+                    .Include(p => p.Team.Edition)
+                    .Include(p => p.Team.Category)
+                    .Where(p => p.Team.CategoryId == existingCategory.Id)
+                    .ToList();
+
+                return _mapper.Map<IEnumerable<PlayerRequestResponseDTO>>(playerList);
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+
+        public IEnumerable<PlayerRequestResponseDTO> GetByEdition(string editonName)
+        {
+            try
+            {
+                var existingEdition = _context.Editions
+                    .Where(e => e.Name == editonName)
+                    .ToList()
+                    .FirstOrDefault()
+                    ?? throw new Exception($"No existe ninguna edición '{editonName}' en la base de datos.");
+
+                var playerList = _context.Players
+                    .Include(p => p.Team)
+                    .Include(p => p.Team.Edition)
+                    .Include(p => p.Team.Category)
+                    .Where(p => p.Team.EditionId == existingEdition.Id)
+                    .ToList();
+
+                return _mapper.Map<IEnumerable<PlayerRequestResponseDTO>>(playerList);
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+
+        public IEnumerable<PlayerRequestResponseDTO> GetByTeam(string teamName)
+        {
+            try
+            {
+                var existingTeam = _context.Teams
+                    .Where(t => t.Name == teamName)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ningún equipo '{teamName}' en la base de datos");
+                
+                var playerList = _context.Players
+                    .Include(p => p.Team)
+                    .Include(p => p.Team.Edition)
+                    .Include(p => p.Team.Category)
+                    .Where(p => p.Team.Id == existingTeam.Id)
+                    .ToList();
+            
+                return _mapper.Map<IEnumerable<PlayerRequestResponseDTO>>(playerList);
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
         }
 
         public PlayerRequestResponseDTO Post(PlayerRequestInputDTO newPlayerData)
@@ -84,7 +162,7 @@ namespace BusinessLogic.Player
             {
                 var m = ex.Message;
                 throw;
-            }           
+            }
         }
 
         public IEnumerable<Entities.Entities.Player> PostSeveralPlayers(IEnumerable<Entities.Entities.Player> value)

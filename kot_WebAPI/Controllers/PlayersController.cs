@@ -47,14 +47,71 @@ namespace kot_WebAPI.Controllers
         /// Get specific user information by NIF.
         /// </summary>
         /// <param name="nif">Player's NIF.</param>
-        [HttpGet("{nif}")]
+        [HttpGet("doc/{nif}")]
         public IActionResult GetPlayerByNif(string nif)
         {
             try
             {
-                var player = _playersBll.Get(nif);
+                var player = _playersBll.GetByNif(nif);
                 if (player == null)
                     return NotFound($"No se encontró jugador con NIF: {nif}");
+                
+                return Ok(player);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get all user information by category.
+        /// </summary>
+        /// <param name="category">Players category.</param>
+        [HttpGet("category")]
+        public IActionResult GetPlayerByCategory(string category)
+        {
+            try
+            {
+                var player = _playersBll.GetByCategory(category);
+                
+                return Ok(player);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get all user information by edition.
+        /// </summary>
+        /// <param name="edition">Players edition.</param>
+        [HttpGet("edition")]
+        public IActionResult GetPlayerByEdition(string edition)
+        {
+            try
+            {
+                var player = _playersBll.GetByEdition(edition);
+                
+                return Ok(player);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get all user information by team.
+        /// </summary>
+        /// <param name="teamName">Players team.</param>
+        [HttpGet("team")]
+        public IActionResult GetPlayerByTeam(string teamName)
+        {
+            try
+            {
+                var player = _playersBll.GetByTeam(teamName);
                 
                 return Ok(player);
             }
@@ -68,7 +125,7 @@ namespace kot_WebAPI.Controllers
         /// Add new player.
         /// </summary>
         /// <param name="value">New player data.</param>
-        [HttpPost]
+        [HttpPost("new")]
         public IActionResult AddPlayer([FromBody] PlayerRequestInputDTO value)
         {
             try
@@ -90,7 +147,7 @@ namespace kot_WebAPI.Controllers
         /// Adding several players.
         /// </summary>
         /// <param name="value">List of players to add.</param>
-        [HttpPost("several")]
+        [HttpPost("new/several")]
         public IActionResult AddSeveralPlayers([FromBody] IEnumerable<Player> value)
         {
             try

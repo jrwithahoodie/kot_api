@@ -10,6 +10,6 @@ namespace BusinessLogic.DTO
         public string Name { get; set; }
         public bool Pay { get; set; }
         public string CategoryName { get; set; }
-        public string EditionName { get; set; }
+        public string? EditionName { get; set; }
     }
 }
