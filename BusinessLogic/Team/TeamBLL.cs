@@ -186,21 +186,31 @@ namespace BusinessLogic.Team
                     newTeam.Defeats = 0;
                     newTeam.Points_diff = 0;
                     newTeam.Classification_points = 0;
-
-                    newTeam.EditionId = 2;
+                    
                     newTeam.GroupId = 1;
 
                     var category = _context.Categories
                         .Where(c => c.Name == newTeamData.CategoryName)
                         .ToList()
+                        .FirstOrDefault()
+                            ?? throw new Exception("La categoría especificada no existe");
+
+                    newTeam.CategoryId = category.Id;
+
+                    var edition = _context.Editions
+                        .Where(e => e.Name == newTeamData.EditionName && e.IsActive == true)
+                        .ToList()
                         .FirstOrDefault();
-                    if (category == null)
+                    if(edition == null)
                     {
-                        throw new Exception("La categoría especificada no existe");
+                        newTeam.EditionId = _context.Editions
+                            .Where(e => e.IsActive == true)
+                            .ToList()
+                            .FirstOrDefault().Id;
                     }
                     else
                     {
-                        newTeam.CategoryId = category.Id;
+                        newTeam.EditionId = edition.Id;
                     }
 
                     var result = _context.Teams.Add(newTeam);

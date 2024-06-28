@@ -40,10 +40,8 @@ namespace BusinessLogic.Edition
                 var existingEdition = _context.Editions
                     .Where(e => e.Name == newEditionData.Name)
                     .ToList()
-                    .FirstOrDefault();
-                
-                if (existingEdition != null)
-                    throw new Exception("Esta edición ya existe");
+                    .FirstOrDefault()
+                        ?? throw new Exception("Esta edición ya existe");
                 
                 var edition = _context.Editions.Add(newEditionData);
                 _context.SaveChanges();
@@ -67,10 +65,8 @@ namespace BusinessLogic.Edition
                 var edition = _context.Editions
                     .Where(e => e.Name == editionName)
                     .ToList()
-                    .FirstOrDefault();
-                
-                if(edition == null)
-                    throw new Exception("No existe ninguna edición con el nombre indicado");
+                    .FirstOrDefault()
+                        ?? throw new Exception("No existe ninguna edición con el nombre indicado");
 
                 edition.IsActive = !edition.IsActive;
 
