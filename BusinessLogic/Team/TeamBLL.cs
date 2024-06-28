@@ -278,5 +278,62 @@ namespace BusinessLogic.Team
                 throw;
             }
         }
+    
+        public TeamRequestResponseDTO UpdateTeamInfo(TeamUpdateRequestInputDTO updateTeamInfo)
+        {
+            try
+            {
+                if(updateTeamInfo == null)
+                    throw new Exception("No se ha pasado ningún dato.");
+
+                if(string.IsNullOrEmpty(updateTeamInfo.Name))
+                    throw new Exception("El nombre del equipo no puede ser nulo/vacío");
+
+                var existingTeam = _context.Teams
+                    .Include(t => t.Category)
+                    .Include(t => t.Edition)
+                    .Where(t => t.Name == updateTeamInfo.Name)
+                    .ToList()
+                    .FirstOrDefault();
+
+                if(existingTeam == null)
+                    throw new Exception("El equipo proporcionado no existe en la base de datos.");
+                    
+                var existingCategory = _context.Categories
+                    .Where(c => c.Name == updateTeamInfo.CategoryName)
+                    .ToList()
+                    .FirstOrDefault();
+
+                if (existingCategory == null)
+                    throw new Exception("La nueva categoría especificada no existe en la base de datos.");
+
+                var existingEdition = _context.Editions
+                    .Where(e => e.Name == updateTeamInfo.EditionName)
+                    .ToList()
+                    .FirstOrDefault();
+                
+                if(existingEdition == null)
+                    throw new Exception("La nueva edición especificada no existe en la base de datos.");
+
+                existingTeam.Pay = updateTeamInfo.Pay;
+                existingTeam.Wins = updateTeamInfo.Wins;
+                existingTeam.Defeats = updateTeamInfo.Defeats;
+                existingTeam.Classification_points = updateTeamInfo.Classification_points;
+                existingTeam.CategoryId = existingCategory.Id;
+                existingTeam.EditionId = existingEdition.Id;
+
+                var updateResult = _context.Update(existingTeam);
+                _context.SaveChanges();
+
+                var response = _mapper.Map<TeamRequestResponseDTO>(updateResult.Entity);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
     }
 }

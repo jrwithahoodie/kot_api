@@ -17,5 +17,6 @@ namespace BusinessLogic.Team
         IEnumerable<TeamRequestResponseDTO> GetByCategory(string category);
         TeamRequestResponseDTO Post(TeamRequestInputDTO newTeamData);
         TeamRequestResponseDTO PostWithPlayers(TeamWithPlayersRequestInputDTO newTeamWithPlayersData);
+        TeamRequestResponseDTO UpdateTeamInfo(TeamUpdateRequestInputDTO updateTeamInfo);
     }
 }

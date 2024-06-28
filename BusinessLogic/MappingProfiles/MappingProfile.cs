@@ -32,6 +32,11 @@ namespace BusinessLogic.MappingProfiles
                 .ForMember(dest => dest.Group, opt => opt.Ignore())
                 .ForMember(dest => dest.Edition, opt => opt.Ignore());
 
+            CreateMap<TeamUpdateRequestInputDTO, Entities.Entities.Team>()
+                .ForMember(dest => dest.Category, opt => opt.Ignore())
+                .ForMember(dest => dest.Edition, opt => opt.Ignore())
+                .ForMember(dest => dest.Group, opt => opt.Ignore());
+
             CreateMap<TeamRequestResponseDTO, Entities.Entities.Team>();
             #endregion 
         

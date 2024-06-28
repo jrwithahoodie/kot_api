@@ -100,7 +100,7 @@ namespace kot_WebAPI.Controllers
         ///<summary>
         ///Get teams information by edition.
         ///</summary>
-        [HttpGet("group/edition/{edition}")]
+        [HttpGet("edition/{edition}")]
         public IActionResult GetTeamsByEdition(string edition)
         {
             try
@@ -118,7 +118,7 @@ namespace kot_WebAPI.Controllers
         ///<summary>
         ///Get teams information by category.
         ///</summary>
-        [HttpGet("group/category/{category}")]
+        [HttpGet("category/{category}")]
         public IActionResult GetTeamsByCategory(string category)
         {
             try
@@ -160,6 +160,24 @@ namespace kot_WebAPI.Controllers
             try
             {
                 var result = _teamsBll.PostWithPlayers(value);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+    
+        /// <summary>
+        /// Add new team with players
+        /// </summary>
+        [HttpPut("update")]
+        public IActionResult UpdateTeamInfo([FromBody] TeamUpdateRequestInputDTO updateTeamInfo)
+        {
+            try
+            {
+                var result = _teamsBll.UpdateTeamInfo(updateTeamInfo);
 
                 return Ok(result);
             }
