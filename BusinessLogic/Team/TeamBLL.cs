@@ -350,5 +350,65 @@ namespace BusinessLogic.Team
                 throw;
             }
         }
+
+        public TeamRequestResponseDTO AsignTeamGroup (TeamGroupRequestInputDTO newTeamGroupData){
+            try 
+            {
+                var existingTeam = _context.Teams
+                    .Where(t => t.Name == newTeamGroupData.TeamName)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception("No existe ningún equipo con este nombre");
+
+                var existingGroup = _context.Groups
+                    .Where(g => g.Name == newTeamGroupData.GroupName)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception("No existe ningún grupo con este nombre");
+
+                existingTeam.GroupId = existingGroup.Id;
+
+                var updateResult = _context.Update(existingTeam);
+                _context.SaveChanges();
+
+                var response  = _mapper.Map<TeamRequestResponseDTO>(updateResult.Entity);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+
+        public TeamRequestResponseDTO DeleteTeam(string teamName, string editionName){
+            try
+            {
+                var existingEdition = _context.Editions
+                    .Where(e => e.Name == editionName)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception("No existe ninguna edicion con este nombre");
+                
+                var existingTeam = _context.Teams
+                    .Where(t => t.Name.Equals(teamName) && t.EditionId == existingEdition.Id)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ningún equipo {teamName} en la edición {editionName}");
+                
+                _context.Teams.Remove(existingTeam);
+                _context.SaveChanges();
+
+                var response = _mapper.Map<TeamRequestResponseDTO>(existingTeam);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
     }
 }

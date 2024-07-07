@@ -18,5 +18,7 @@ namespace BusinessLogic.Team
         TeamRequestResponseDTO Post(TeamRequestInputDTO newTeamData);
         TeamRequestResponseDTO PostWithPlayers(TeamWithPlayersRequestInputDTO newTeamWithPlayersData);
         TeamRequestResponseDTO UpdateTeamInfo(TeamUpdateRequestInputDTO updateTeamInfo);
+        TeamRequestResponseDTO AsignTeamGroup (TeamGroupRequestInputDTO newTeamGroupData);
+        TeamRequestResponseDTO DeleteTeam(string teamName, string editionName);
     }
 }

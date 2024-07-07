@@ -58,7 +58,7 @@ namespace kot_WebAPI.Controllers
             }
         }
     
-        [HttpPut("{edition}/alter")]
+        [HttpPost("{edition}/alter")]
         public IActionResult AlterEdition(string edition)
         {
             try

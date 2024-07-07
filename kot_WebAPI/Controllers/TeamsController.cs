@@ -186,5 +186,23 @@ namespace kot_WebAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        /// <summary>
+        /// Delete team of a edition.
+        /// </summary>
+        [HttpDelete("{teamname}/{editionname}")]
+        public IActionResult DeleteUser(string teamname, string editionname)
+        {
+            try
+            {
+                var result = _teamsBll.DeleteTeam(teamname, editionname);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
     }
 }
