@@ -1,4 +1,5 @@
-﻿using Entities.AppContext;
+﻿using BusinessLogic.DTO;
+using Entities.AppContext;
 using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -128,29 +129,33 @@ namespace BusinessLogic.Game
             return result.Entity;
         }
 
-        public Entities.Entities.Game Put(int id, int score1, int score2)
+        public Entities.Entities.Game Put(AlterGameResultRequestDTO gameResultInfo)
         {
             try
             {
                 // recuperar el partido que tiene id = id
-                var game = _context.Games
+                var existingGame = _context.Games
                     .Include(t => t.Team1)
                     .Include(t => t.Team2)
-                    .Where(g => g.Id == id).ToList().FirstOrDefault();
-                // actualizar los campos de score old con los valoes score que traifo de db
-                var score1old = game.Score1;
-                var score2old = game.Score2;
+                    .Where(g => g.Id == gameResultInfo.GameId)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ningún partido con id '{gameResultInfo.GameId}'");
 
-                game.Score1Old = score1old;
-                game.Score2Old = score2old;
+                // actualizar los campos de score old con los valoes score que traifo de db
+                var score1old = existingGame.Score1;
+                var score2old = existingGame.Score2;
+
+                existingGame.Score1Old = score1old;
+                existingGame.Score2Old = score2old;
                 // actualizar los valores normales con los datos nuevos
-                game.Score1 = score1;
-                game.Score2 = score2;
+                existingGame.Score1 = gameResultInfo.Team1Score;
+                existingGame.Score2 = gameResultInfo.Team2Score;
                 // hacer un update y savechanges
-                _context.Update(game);
+                _context.Update(existingGame);
                 _context.SaveChanges();
 
-                return game;
+                return existingGame;
             }
             catch (Exception ex)
             {
