@@ -16,6 +16,6 @@ namespace BusinessLogic.Group
 
         void Put(int id, string value);
 
-        void Delete(string name);
+        Entities.Entities.Group Delete(string name);
     }
 }

@@ -26,9 +26,26 @@ namespace BusinessLogic.Group
 
         #endregion
 
-        public void Delete(string name)
+        public Entities.Entities.Group Delete(string name)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var existingGroup = _context.Groups
+                    .Where(g => g.Name == name)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ningún grupo con el nombre '{name}'");
+                
+                _context.Groups.Remove(existingGroup);
+                _context.SaveChanges();
+
+                return existingGroup;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
         }
 
         public IEnumerable<Entities.Entities.Group> Get()

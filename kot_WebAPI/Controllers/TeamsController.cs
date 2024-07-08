@@ -188,6 +188,24 @@ namespace kot_WebAPI.Controllers
         }
 
         /// <summary>
+        /// Asign new group to a team
+        /// </summary>
+        [HttpPut("altergroup")]
+        public IActionResult UpdateTeamGroup([FromBody] TeamGroupRequestInputDTO updateGroupInfo)
+        {
+            try
+            {
+                var result = _teamsBll.AsignTeamGroup(updateGroupInfo);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Delete team of a edition.
         /// </summary>
         [HttpDelete("{teamname}/{editionname}")]

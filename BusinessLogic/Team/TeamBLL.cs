@@ -354,11 +354,17 @@ namespace BusinessLogic.Team
         public TeamRequestResponseDTO AsignTeamGroup (TeamGroupRequestInputDTO newTeamGroupData){
             try 
             {
-                var existingTeam = _context.Teams
-                    .Where(t => t.Name == newTeamGroupData.TeamName)
+                var existingEdition = _context.Editions
+                    .Where(e => e.Name == newTeamGroupData.EditionName)
                     .ToList()
                     .FirstOrDefault()
-                        ?? throw new Exception("No existe ningún equipo con este nombre");
+                        ?? throw new Exception($"No existe ninguna edición con el nombre '{newTeamGroupData.EditionName}'");
+
+                var existingTeam = _context.Teams
+                    .Where(t => t.Name == newTeamGroupData.TeamName && t.EditionId == existingEdition.Id)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ningún equipo con el nombre '{newTeamGroupData.TeamName}' en la edición {newTeamGroupData.EditionName}");
 
                 var existingGroup = _context.Groups
                     .Where(g => g.Name == newTeamGroupData.GroupName)

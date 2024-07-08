@@ -42,7 +42,7 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get game information by id.
         /// </summary>
-        [HttpGet("{id}")]
+        [HttpGet("info/{id}")]
         public IActionResult GetGameById(int id)
         {
             try
@@ -60,7 +60,7 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get all games information by staff.
         /// </summary>
-        [HttpGet("{staffId}")]
+        [HttpGet("staff/{staffId}")]
         public IActionResult GetGameByStaffId(int staffId)
         {
             try
@@ -78,7 +78,7 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Get all games information by court.
         /// </summary>
-        [HttpGet("{court}")]
+        [HttpGet("court/{court}")]
         public IActionResult GetGamesByCourt(int court)
         {
             try
@@ -114,7 +114,7 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Update game scoring result.
         /// </summary>
-        [HttpPut("{id}/{score1}/{score2}")]
+        [HttpPut("result/{id}/{score1}/{score2}")]
         public IActionResult Put(int id, int score1, int score2)
         {
             try
@@ -132,14 +132,14 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Delete game.
         /// </summary>
-        [HttpDelete("{id}")]
+        [HttpDelete("remove/{id}")]
         public IActionResult Delete(int id)
         {
             try
             {
-                _gamesBll.Delete(id);
+                var result = _gamesBll.Delete(id);
 
-                return Ok();
+                return Ok(result);
             }
             catch (Exception ex)
             {

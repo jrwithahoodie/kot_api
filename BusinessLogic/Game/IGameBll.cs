@@ -14,6 +14,6 @@ namespace BusinessLogic.Game
         IEnumerable<Entities.Entities.Game> GetByCourt(int id);
         Entities.Entities.Game Post(Entities.Entities.Game value);
         Entities.Entities.Game Put(int id, int score1, int score2);
-        void Delete(int id);
+        Entities.Entities.Game Delete(int id);
     }
 }

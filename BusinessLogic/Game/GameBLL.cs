@@ -26,9 +26,26 @@ namespace BusinessLogic.Game
 
         #endregion
 
-        public void Delete(int id)
+        public Entities.Entities.Game Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var existingGame = _context.Games
+                    .Where(g => g.Id == id)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ningún partido con id '{id}'");
+                
+                _context.Games.Remove(existingGame);
+                _context.SaveChanges();
+
+                return existingGame;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
         }
 
         public IEnumerable<Entities.Entities.Game> Get()

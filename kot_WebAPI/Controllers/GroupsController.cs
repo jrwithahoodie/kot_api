@@ -76,5 +76,23 @@ namespace kot_WebAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        /// <summary>
+        /// Delete group.
+        /// </summary>
+        [HttpDelete("{groupname}")]
+        public IActionResult DeleteGroup(string groupname)
+        {
+            try
+            {
+                var result = _groupsBll.Delete(groupname);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
     }
 }
