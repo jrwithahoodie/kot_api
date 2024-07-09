@@ -64,6 +64,7 @@ namespace BusinessLogic.Team
                 .Include(t => t.Category)
                 .Where(t => t.Group.Name == groupName)
                 .OrderByDescending(c => c.Classification_points)
+                .ThenByDescending(c => c.Points_diff)
                 .ToList();
 
             var playersByTeam = _context.Players
