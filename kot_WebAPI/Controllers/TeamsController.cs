@@ -62,6 +62,24 @@ namespace kot_WebAPI.Controllers
         }
 
         /// <summary>
+        /// Get all classifications.
+        /// </summary>
+        [HttpGet("classifications/{editionname}")]
+        public IActionResult GetTeamClass(string editionname)
+        {
+            try
+            {
+                var teams = _teamsBll.GetAllClassif(editionname);
+
+                return Ok(teams);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+        /// <summary>
         /// Get classification information by group.
         /// </summary>
         [HttpGet("group/{groupName}/classification")]

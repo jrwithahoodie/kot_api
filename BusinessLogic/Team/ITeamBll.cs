@@ -11,6 +11,7 @@ namespace BusinessLogic.Team
     {
         IEnumerable<TeamRequestResponseDTO> Get();
         TeamRequestResponseDTO GetByName(string name);
+        IEnumerable<AllGroupsClassificationResponseDTO> GetAllClassif(string editionName);
         IEnumerable<TeamRequestResponseDTO> GetClassif(string groupName);
         IEnumerable<TeamRequestResponseDTO> GetByGroup(string groupName);
         IEnumerable<TeamRequestResponseDTO> GetByEdition(string edition);

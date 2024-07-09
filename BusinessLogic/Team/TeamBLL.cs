@@ -57,6 +57,51 @@ namespace BusinessLogic.Team
             return teamListMapped;
         }
         
+        public IEnumerable<AllGroupsClassificationResponseDTO> GetAllClassif(string editionName)
+        {
+            try
+            {
+                var existingEdition = _context.Editions
+                    .Where(e => e.Name == editionName)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ninguna edición {editionName}");
+
+                var teamList = _context.Teams
+                    .Include(t => t.Group)
+                    .Include(t => t.Edition)
+                    .Include(t => t.Category)
+                    .Where(t => t.Edition.Name == editionName)
+                    .ToList();
+                
+                var groupedTeams = teamList
+                    .GroupBy(t => t.Group.Name)
+                    .Select(g => new AllGroupsClassificationResponseDTO
+                    {
+                        GroupName = g.Key,
+                        GroupTeams = g.OrderByDescending(t => t.Classification_points)
+                                        .ThenByDescending(t => t.Points_diff)
+                                        .Select(t =>
+                                        {
+                                            var teamDto = _mapper.Map<TeamRequestResponseDTO>(t);
+                                            teamDto.TeamPlayers = _context.Players
+                                                .Where(p => p.TeamId == t.Id)
+                                                .Select(p => _mapper.Map<PlayerRequestResponseDTO>(p))
+                                                .ToList();
+                                            
+                                            return teamDto;
+                                        })
+                    });
+                
+                return groupedTeams;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+
         public IEnumerable<TeamRequestResponseDTO> GetClassif(string groupName)
         {
             var teamList = _context.Teams
