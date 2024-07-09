@@ -146,7 +146,7 @@ namespace BusinessLogic.Game
                     .FirstOrDefault()
                         ?? throw new Exception($"No existe ningún grupo '{groupName}'");
                 
-                var existingEdition =_context.Groups
+                var existingEdition =_context.Editions
                     .Where(e => e.Name == editionName)
                     .ToList()
                     .FirstOrDefault()
@@ -180,13 +180,13 @@ namespace BusinessLogic.Game
         {
             try
             {
-                var existingTeam = _context.Groups
+                var existingTeam = _context.Teams
                     .Where(g => g.Name == teamName)
                     .ToList()
                     .FirstOrDefault()
                         ?? throw new Exception($"No existe ningún equipo '{teamName}'");
                 
-                var existingEdition =_context.Groups
+                var existingEdition =_context.Editions
                     .Where(e => e.Name == editionName)
                     .ToList()
                     .FirstOrDefault()
