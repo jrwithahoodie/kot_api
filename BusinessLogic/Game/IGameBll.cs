@@ -9,12 +9,12 @@ namespace BusinessLogic.Game
 {
     public interface IGameBll
     {
-        IEnumerable<Entities.Entities.Game> Get();
-        Entities.Entities.Game Get(int id);
-        IEnumerable<Entities.Entities.Game> GetByStaff(int staffId);
-        IEnumerable<Entities.Entities.Game> GetByCourt(int id);
-        Entities.Entities.Game Post(Entities.Entities.Game value);
-        Entities.Entities.Game Put(AlterGameResultRequestDTO gameResultInfo);
-        Entities.Entities.Game Delete(int id);
+        IEnumerable<GameInfoRequestResponseDTO> GetAllGames();
+        GameInfoRequestResponseDTO GetGame(int id);
+        IEnumerable<GameInfoRequestResponseDTO> GetByStaff(int staffId);
+        IEnumerable<GameInfoRequestResponseDTO> GetByCourt(int id);
+        GameInfoRequestResponseDTO Post(NewGameRequestDTO newGameData);
+        GameInfoRequestResponseDTO Put(AlterGameResultRequestDTO gameResultInfo);
+        GameInfoRequestResponseDTO Delete(int id);
     }
 }

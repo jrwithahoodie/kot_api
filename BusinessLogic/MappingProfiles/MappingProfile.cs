@@ -52,6 +52,25 @@ namespace BusinessLogic.MappingProfiles
             CreateMap<PlayerInTeamRequestInputDTO, Entities.Entities.Player>()
                 .ForMember(dest => dest.Team, opt => opt.Ignore());
             #endregion
+
+            #region Game mapping
+            CreateMap<Entities.Entities.Game, GameInfoRequestResponseDTO>()
+                .ForMember(dest => dest.Team1Name, opt => opt.MapFrom(src => src.Team1.Name))
+                .ForMember(dest => dest.Team1Score, opt => opt.MapFrom(src => src.Score1))
+                .ForMember(dest => dest.Team2Name, opt => opt.MapFrom(src => src.Team2.Name))
+                .ForMember(dest => dest.Team2Score, opt => opt.MapFrom(src => src.Score2))
+                .ForMember(dest => dest.Court, opt => opt.MapFrom(src => src.Court));
+            
+            CreateMap<NewGameRequestDTO, Entities.Entities.Game>()
+                .ForMember(dest => dest.Team1Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Team2Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Score1, opt => opt.Ignore())
+                .ForMember(dest => dest.Score2, opt => opt.Ignore())
+                .ForMember(dest => dest.Score1Old, opt => opt.Ignore())
+                .ForMember(dest => dest.Score2Old, opt => opt.Ignore())
+                .ForMember(dest => dest.Schedule, opt => opt.Ignore())
+                .ForMember(dest => dest.StaffId, opt => opt.Ignore());
+            #endregion
         }
     }
 }

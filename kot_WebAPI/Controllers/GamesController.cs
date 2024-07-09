@@ -1,4 +1,6 @@
-﻿using BusinessLogic.Game;
+﻿using AutoMapper;
+using BusinessLogic.DTO;
+using BusinessLogic.Game;
 using Entities.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
@@ -12,12 +14,15 @@ namespace kot_WebAPI.Controllers
     {
         #region Fields
         private readonly IGameBll _gamesBll;
+        private readonly IMapper _mapper;
         #endregion
 
         #region Builder
-        public GamesController(IGameBll gamesBll)
+        public GamesController(IGameBll gamesBll, IMapper mapper)
         {
             _gamesBll = gamesBll;
+            _mapper = mapper;
+
         }
         #endregion
 
@@ -29,7 +34,7 @@ namespace kot_WebAPI.Controllers
         {
             try
             {
-                var gamesList = _gamesBll.Get();
+                var gamesList = _gamesBll.GetAllGames();
 
                 return Ok(gamesList);
             }
@@ -47,7 +52,7 @@ namespace kot_WebAPI.Controllers
         {
             try
             {
-                var game = _gamesBll.Get(id);
+                var game = _gamesBll.GetGame(id);
 
                 return Ok(game);
             }
@@ -97,11 +102,11 @@ namespace kot_WebAPI.Controllers
         /// Add new game.
         /// </summary>
         [HttpPost]
-        public IActionResult Register([FromBody] Game value)
+        public IActionResult Register([FromBody] NewGameRequestDTO newGameData)
         {
             try
             {
-                var result = _gamesBll.Post(value);
+                var result = _gamesBll.Post(newGameData);
 
                 return Ok(result);
             }
@@ -114,12 +119,12 @@ namespace kot_WebAPI.Controllers
         /// <summary>
         /// Update game scoring result.
         /// </summary>
-        [HttpPut("result/{id}/{score1}/{score2}")]
-        public IActionResult Put(int id, int score1, int score2)
+        [HttpPut("result")]
+        public IActionResult Put([FromBody] AlterGameResultRequestDTO gameResultInfo)
         {
             try
             {
-                var gameUpdated = _gamesBll.Put(id, score1, score2);
+                var gameUpdated = _gamesBll.Put(gameResultInfo);
 
                 return Ok(gameUpdated);
             }

@@ -1,4 +1,5 @@
-﻿using BusinessLogic.DTO;
+﻿using AutoMapper;
+using BusinessLogic.DTO;
 using Entities.AppContext;
 using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -15,19 +16,174 @@ namespace BusinessLogic.Game
         #region Fields
 
         private readonly Context _context;
+        private readonly IMapper _mapper;
 
         #endregion
 
         #region Builder
 
-        public GameBLL()
+        public GameBLL(IMapper mapper)
         {
             _context = new Context();
+            _mapper = mapper;
         }
 
         #endregion
 
-        public Entities.Entities.Game Delete(int id)
+        public IEnumerable<GameInfoRequestResponseDTO> GetAllGames()
+        {
+            var gameList = _context.Games
+            .Include(g => g.Team1)
+            .Include(g => g.Team2)
+            .ToList();
+
+            var response = _mapper.Map<IEnumerable<GameInfoRequestResponseDTO>>(gameList);
+            
+            return response;
+        }
+
+        public GameInfoRequestResponseDTO GetGame(int gameId)
+        {
+            try
+            {
+                var existingGame = _context.Games
+                .Include(g => g.Team1)
+                .Include(g => g.Team2)
+                .Where(g => g.Id == gameId)
+                .ToList()
+                .FirstOrDefault()
+                    ?? throw new Exception($"No existe ningún partido con el id '{gameId}'");
+
+                var mappedGame = _mapper.Map<GameInfoRequestResponseDTO>(existingGame);
+
+                return mappedGame;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+
+        public IEnumerable<GameInfoRequestResponseDTO> GetByStaff(int staffId)
+        {
+            try
+            {
+                var gameList = _context.Games
+                    .Include(g => g.Team1)
+                    .Include(g => g.Team2)
+                    .Where(g => g.StaffId == staffId)
+                    .ToList();
+
+                var gameListMapped = _mapper.Map<IEnumerable<GameInfoRequestResponseDTO>>(gameList);
+                
+                return gameListMapped;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }            
+        }
+
+        public IEnumerable<GameInfoRequestResponseDTO> GetByCourt(int court)
+        {
+            try
+            {
+                var gameList = _context.Games
+                    .Include(g => g.Team1)
+                    .Include(g => g.Team2)
+                    .Where(g => g.Court == court)
+                    .ToList();
+
+                var gameListMapped = _mapper.Map<IEnumerable<GameInfoRequestResponseDTO>>(gameList);
+                
+                return gameListMapped;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }            
+        }
+
+        public GameInfoRequestResponseDTO Post(NewGameRequestDTO newGameData)
+        {
+            try
+            {
+                var existingTeam1 = _context.Teams
+                .Where(t => t.Name == newGameData.Team1Name)
+                .ToList()
+                .FirstOrDefault()
+                    ?? throw new Exception($"No hay ningún equipo con nombre '{newGameData.Team1Name}'");
+            
+                var existingTeam2 = _context.Teams
+                    .Where(t => t.Name == newGameData.Team2Name)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No hay ningún equipo con nombre '{newGameData.Team2Name}'");
+
+                var newGame = _mapper.Map<Entities.Entities.Game>(newGameData);
+
+                newGame.Team1Id = existingTeam1.Id;
+                newGame.Team2Id = existingTeam2.Id;
+
+                newGame.Schedule = DateTime.Now;
+                newGame.StaffId = 2;
+
+                var result = _context.Games.Add(newGame);
+                _context.SaveChanges();
+
+                var resultMapped = _mapper.Map<GameInfoRequestResponseDTO>(result.Entity);
+                resultMapped.Team1Name = existingTeam1.Name;
+                resultMapped.Team2Name = existingTeam2.Name;
+
+                return resultMapped;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+
+        public GameInfoRequestResponseDTO Put(AlterGameResultRequestDTO gameResultInfo)
+        {
+            try
+            {
+                var existingGame = _context.Games
+                    .Include(t => t.Team1)
+                    .Include(t => t.Team2)
+                    .Where(g => g.Id == gameResultInfo.GameId)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ningún partido con id '{gameResultInfo.GameId}'");
+
+                var score1old = existingGame.Score1;
+                var score2old = existingGame.Score2;
+
+                existingGame.Score1Old = score1old;
+                existingGame.Score2Old = score2old;
+                
+                existingGame.Score1 = gameResultInfo.Team1Score;
+                existingGame.Score2 = gameResultInfo.Team2Score;
+                
+                _context.Update(existingGame);
+                _context.SaveChanges();
+
+
+                var gameMapped = _mapper.Map<GameInfoRequestResponseDTO>(existingGame);
+
+                return gameMapped;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+
+        public GameInfoRequestResponseDTO Delete(int id)
         {
             try
             {
@@ -40,7 +196,9 @@ namespace BusinessLogic.Game
                 _context.Games.Remove(existingGame);
                 _context.SaveChanges();
 
-                return existingGame;
+                var gameMapped = _mapper.Map<GameInfoRequestResponseDTO>(existingGame);
+
+                return gameMapped;
             }
             catch (Exception ex)
             {
@@ -49,119 +207,5 @@ namespace BusinessLogic.Game
             }
         }
 
-        public IEnumerable<Entities.Entities.Game> Get()
-        {
-            var gameList = _context.Games.ToList();
-
-            return gameList;
-        }
-
-        public Entities.Entities.Game Get(int id)
-        {
-            var user = _context.Games.Where(g => g.Id == id).ToList().FirstOrDefault();
-
-            return user;
-        }
-
-        public IEnumerable<Entities.Entities.Game> GetByStaff(int staffId)
-        {
-            try
-            {
-                var gameList = _context.Games
-                .Include(g => g.Team1)
-                .Include(g => g.Team2)
-                .Where(g => g.StaffId == staffId).ToList();
-
-                return gameList;
-            }
-            catch (Exception ex)
-            {
-                var m = ex.Message;
-                throw;
-            }            
-        }
-
-        public IEnumerable<Entities.Entities.Game> GetByCourt(int court)
-        {
-            try
-            {
-                var gameList = _context.Games
-                    .Include(g => g.Team1)
-                    .Include(g => g.Team2)
-                    .Where(g => g.Court == court).ToList();
-
-                return gameList;
-            }
-            catch (Exception ex)
-            {
-                var m = ex.Message;
-                throw;
-            }            
-        }
-
-        public Entities.Entities.Game Post(Entities.Entities.Game value)
-        {
-            var team1_db = _context.Teams.Where(g => g.Id == value.Team1Id).FirstOrDefault();
-            var team2_db = _context.Teams.Where(g => g.Id == value.Team2Id).FirstOrDefault();
-
-            var staff = _context.Users.Where(s => s.Id == value.StaffId).FirstOrDefault();
-
-            var auxGame = new Entities.Entities.Game
-            {
-                Team1 = team1_db,
-                Team2 = team2_db,
-                Staff = staff,
-                Schedule = value.Schedule,
-                Court = value.Court,
-                Score1 = value.Score1,
-                Score2 = value.Score2,
-                Score1Old = 0,
-                Score2Old = 0,
-                Team1Id = team1_db.Id,
-                Team2Id = team2_db.Id,
-                StaffId = staff.Id
-            };
-
-            var result = _context.Games.Add(auxGame);
-
-            _context.SaveChanges();
-
-            return result.Entity;
-        }
-
-        public Entities.Entities.Game Put(AlterGameResultRequestDTO gameResultInfo)
-        {
-            try
-            {
-                // recuperar el partido que tiene id = id
-                var existingGame = _context.Games
-                    .Include(t => t.Team1)
-                    .Include(t => t.Team2)
-                    .Where(g => g.Id == gameResultInfo.GameId)
-                    .ToList()
-                    .FirstOrDefault()
-                        ?? throw new Exception($"No existe ningún partido con id '{gameResultInfo.GameId}'");
-
-                // actualizar los campos de score old con los valoes score que traifo de db
-                var score1old = existingGame.Score1;
-                var score2old = existingGame.Score2;
-
-                existingGame.Score1Old = score1old;
-                existingGame.Score2Old = score2old;
-                // actualizar los valores normales con los datos nuevos
-                existingGame.Score1 = gameResultInfo.Team1Score;
-                existingGame.Score2 = gameResultInfo.Team2Score;
-                // hacer un update y savechanges
-                _context.Update(existingGame);
-                _context.SaveChanges();
-
-                return existingGame;
-            }
-            catch (Exception ex)
-            {
-                var m = ex.Message;
-                throw;
-            }
-        }
     }
 }
