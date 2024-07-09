@@ -99,6 +99,42 @@ namespace kot_WebAPI.Controllers
         }
 
         /// <summary>
+        /// Get all games information by group.
+        /// </summary>
+        [HttpGet("group/{groupname}/{editionname}")]
+        public IActionResult GetGamesByGroup(string groupname, string editionname)
+        {
+            try
+            {
+                var game = _gamesBll.GetByGroup(groupname, editionname);
+
+                return Ok(game);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+        /// <summary>
+        /// Get all games information by team.
+        /// </summary>
+        [HttpGet("team/{teamname}/{editionname}")]
+        public IActionResult GetGamesByTeam(string teamname, string editionname)
+        {
+            try
+            {
+                var game = _gamesBll.GetByTeam(teamname, editionname);
+
+                return Ok(game);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+        /// <summary>
         /// Add new game.
         /// </summary>
         [HttpPost]

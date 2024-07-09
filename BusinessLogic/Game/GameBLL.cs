@@ -33,9 +33,17 @@ namespace BusinessLogic.Game
         public IEnumerable<GameInfoRequestResponseDTO> GetAllGames()
         {
             var gameList = _context.Games
-            .Include(g => g.Team1)
-            .Include(g => g.Team2)
-            .ToList();
+                .Include(g => g.Team1)
+                .Include(g => g.Team2)
+                .ThenInclude(t => t.Category)
+                .Include(g => g.Team1)
+                .ThenInclude(t => t.Edition)
+                .Include(g => g.Team2)
+                .ThenInclude(t => t.Category)
+                .Include(g => g.Team2)
+                .ThenInclude(t => t.Edition)
+                .ToList();
+
 
             var response = _mapper.Map<IEnumerable<GameInfoRequestResponseDTO>>(gameList);
             
@@ -49,6 +57,13 @@ namespace BusinessLogic.Game
                 var existingGame = _context.Games
                 .Include(g => g.Team1)
                 .Include(g => g.Team2)
+                .ThenInclude(t => t.Category)
+                .Include(g => g.Team1)
+                .ThenInclude(t => t.Edition)
+                .Include(g => g.Team2)
+                .ThenInclude(t => t.Category)
+                .Include(g => g.Team2)
+                .ThenInclude(t => t.Edition)
                 .Where(g => g.Id == gameId)
                 .ToList()
                 .FirstOrDefault()
@@ -72,6 +87,13 @@ namespace BusinessLogic.Game
                 var gameList = _context.Games
                     .Include(g => g.Team1)
                     .Include(g => g.Team2)
+                    .ThenInclude(t => t.Category)
+                    .Include(g => g.Team1)
+                    .ThenInclude(t => t.Edition)
+                    .Include(g => g.Team2)
+                    .ThenInclude(t => t.Category)
+                    .Include(g => g.Team2)
+                    .ThenInclude(t => t.Edition)
                     .Where(g => g.StaffId == staffId)
                     .ToList();
 
@@ -93,6 +115,13 @@ namespace BusinessLogic.Game
                 var gameList = _context.Games
                     .Include(g => g.Team1)
                     .Include(g => g.Team2)
+                    .ThenInclude(t => t.Category)
+                    .Include(g => g.Team1)
+                    .ThenInclude(t => t.Edition)
+                    .Include(g => g.Team2)
+                    .ThenInclude(t => t.Category)
+                    .Include(g => g.Team2)
+                    .ThenInclude(t => t.Edition)
                     .Where(g => g.Court == court)
                     .ToList();
 
@@ -105,6 +134,86 @@ namespace BusinessLogic.Game
                 var m = ex.Message;
                 throw;
             }            
+        }
+
+        public IEnumerable<GameInfoRequestResponseDTO> GetByGroup(string groupName, string editionName)
+        {
+            try
+            {
+                var existingGroup = _context.Groups
+                    .Where(g => g.Name == groupName)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ningún grupo '{groupName}'");
+                
+                var existingEdition =_context.Groups
+                    .Where(e => e.Name == editionName)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ninguna edición {editionName}");
+
+                var gameList = _context.Games
+                    .Include(g => g.Team1)
+                        .ThenInclude(t => t.Category)
+                    .Include(g => g.Team1)
+                        .ThenInclude(t => t.Edition)
+                    .Include(g => g.Team2)
+                        .ThenInclude(t => t.Category)
+                    .Include(g => g.Team2)
+                        .ThenInclude(t => t.Edition)
+                    .Where(g => (g.Team1.Group.Name == groupName && g.Team1.Edition.Name == editionName) ||
+                                (g.Team2.Group.Name == groupName && g.Team2.Edition.Name == editionName))
+                    .ToList();
+                
+                var gameListMapped = _mapper.Map<IEnumerable<GameInfoRequestResponseDTO>>(gameList);
+        
+                return gameListMapped;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+
+        public IEnumerable<GameInfoRequestResponseDTO> GetByTeam(string teamName, string editionName)
+        {
+            try
+            {
+                var existingTeam = _context.Groups
+                    .Where(g => g.Name == teamName)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ningún equipo '{teamName}'");
+                
+                var existingEdition =_context.Groups
+                    .Where(e => e.Name == editionName)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ninguna edición {editionName}");
+
+                var gameList = _context.Games
+                    .Include(g => g.Team1)
+                        .ThenInclude(t => t.Category)
+                    .Include(g => g.Team1)
+                        .ThenInclude(t => t.Edition)
+                    .Include(g => g.Team2)
+                        .ThenInclude(t => t.Category)
+                    .Include(g => g.Team2)
+                        .ThenInclude(t => t.Edition)
+                    .Where(g => (g.Team1.Name == teamName && g.Team1.Edition.Name == editionName) ||
+                                (g.Team2.Name == teamName && g.Team2.Edition.Name == editionName))
+                    .ToList();
+                
+                var gameListMapped = _mapper.Map<IEnumerable<GameInfoRequestResponseDTO>>(gameList);
+        
+                return gameListMapped;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
         }
 
         public GameInfoRequestResponseDTO Post(NewGameRequestDTO newGameData)
@@ -135,8 +244,8 @@ namespace BusinessLogic.Game
                 _context.SaveChanges();
 
                 var resultMapped = _mapper.Map<GameInfoRequestResponseDTO>(result.Entity);
-                resultMapped.Team1Name = existingTeam1.Name;
-                resultMapped.Team2Name = existingTeam2.Name;
+                resultMapped.Team1 = _mapper.Map<TeamRequestResponseDTO>(existingTeam1);
+                resultMapped.Team2 = _mapper.Map<TeamRequestResponseDTO>(existingTeam2);
 
                 return resultMapped;
             }
@@ -152,8 +261,15 @@ namespace BusinessLogic.Game
             try
             {
                 var existingGame = _context.Games
-                    .Include(t => t.Team1)
-                    .Include(t => t.Team2)
+                    .Include(g => g.Team1)
+                    .Include(g => g.Team2)
+                    .ThenInclude(t => t.Category)
+                    .Include(g => g.Team1)
+                    .ThenInclude(t => t.Edition)
+                    .Include(g => g.Team2)
+                    .ThenInclude(t => t.Category)
+                    .Include(g => g.Team2)
+                    .ThenInclude(t => t.Edition)
                     .Where(g => g.Id == gameResultInfo.GameId)
                     .ToList()
                     .FirstOrDefault()

@@ -55,9 +55,9 @@ namespace BusinessLogic.MappingProfiles
 
             #region Game mapping
             CreateMap<Entities.Entities.Game, GameInfoRequestResponseDTO>()
-                .ForMember(dest => dest.Team1Name, opt => opt.MapFrom(src => src.Team1.Name))
+                .ForMember(dest => dest.Team1, opt => opt.MapFrom(src => src.Team1))
                 .ForMember(dest => dest.Team1Score, opt => opt.MapFrom(src => src.Score1))
-                .ForMember(dest => dest.Team2Name, opt => opt.MapFrom(src => src.Team2.Name))
+                .ForMember(dest => dest.Team2, opt => opt.MapFrom(src => src.Team2))
                 .ForMember(dest => dest.Team2Score, opt => opt.MapFrom(src => src.Score2))
                 .ForMember(dest => dest.Court, opt => opt.MapFrom(src => src.Court));
             
