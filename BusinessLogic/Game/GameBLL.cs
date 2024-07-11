@@ -260,6 +260,18 @@ namespace BusinessLogic.Game
         {
             try
             {
+                var existingTeam1 =_context.Teams
+                    .Where(t => t.Name == gameResultInfo.Team1Name)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"EL equipo 1 con nombre '{gameResultInfo.Team1Name}' no existe");
+                
+                var existingTeam2 =_context.Teams
+                    .Where(t => t.Name == gameResultInfo.Team2Name)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"EL equipo 1 con nombre '{gameResultInfo.Team2Name}' no existe");
+
                 var existingGame = _context.Games
                     .Include(g => g.Team1)
                     .Include(g => g.Team2)
@@ -270,10 +282,10 @@ namespace BusinessLogic.Game
                     .ThenInclude(t => t.Category)
                     .Include(g => g.Team2)
                     .ThenInclude(t => t.Edition)
-                    .Where(g => g.Id == gameResultInfo.GameId)
+                    .Where(g => g.Team1Id == existingTeam1.Id && g.Team2Id == existingTeam2.Id)
                     .ToList()
                     .FirstOrDefault()
-                        ?? throw new Exception($"No existe ningún partido con id '{gameResultInfo.GameId}'");
+                        ?? throw new Exception($"No existe ningún partido con esos datos.'");
 
                 var score1old = existingGame.Score1;
                 var score2old = existingGame.Score2;

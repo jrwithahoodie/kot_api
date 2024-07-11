@@ -36,7 +36,7 @@ namespace Entities.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
@@ -73,7 +73,7 @@ namespace Entities.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Editions");
+                    b.ToTable("Editions", (string)null);
 
                     b.HasData(
                         new
@@ -149,6 +149,34 @@ namespace Entities.Migrations
                         {
                             t.HasTrigger("T_update_game");
                         });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Court = 1,
+                            Schedule = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Score1 = 2,
+                            Score1Old = 0,
+                            Score2 = 15,
+                            Score2Old = 0,
+                            StaffId = 2,
+                            Team1Id = 1,
+                            Team2Id = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Court = 2,
+                            Schedule = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Score1 = 21,
+                            Score1Old = 0,
+                            Score2 = 1,
+                            Score2Old = 0,
+                            StaffId = 2,
+                            Team1Id = 3,
+                            Team2Id = 1
+                        });
                 });
 
             modelBuilder.Entity("Entities.Entities.Group", b =>
@@ -164,7 +192,7 @@ namespace Entities.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
 
                     b.HasData(
                         new
@@ -224,7 +252,139 @@ namespace Entities.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Instagram = "playerIg",
+                            NIF = "12354678Z",
+                            Name = "playerM1A1",
+                            Phone = "111222333",
+                            TeamId = 1,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Instagram = "playerIg",
+                            NIF = "12354678A",
+                            Name = "playerM1A2",
+                            Phone = "111222333",
+                            TeamId = 1,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Instagram = "playerIg",
+                            NIF = "12354678B",
+                            Name = "playerM1A3",
+                            Phone = "111222333",
+                            TeamId = 1,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Instagram = "playerIg",
+                            NIF = "12354678C",
+                            Name = "playerM2A1",
+                            Phone = "111222333",
+                            TeamId = 2,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Instagram = "playerIg",
+                            NIF = "12354678D",
+                            Name = "playerM2A2",
+                            Phone = "111222333",
+                            TeamId = 2,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Instagram = "playerIg",
+                            NIF = "12354678E",
+                            Name = "playerM2A3",
+                            Phone = "111222333",
+                            TeamId = 2,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Instagram = "playerIg",
+                            NIF = "12354678F",
+                            Name = "playerM3A1",
+                            Phone = "111222333",
+                            TeamId = 3,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Instagram = "playerIg",
+                            NIF = "12354678G",
+                            Name = "playerM3A2",
+                            Phone = "111222333",
+                            TeamId = 3,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Instagram = "playerIg",
+                            NIF = "12354678H",
+                            Name = "playerM3A3",
+                            Phone = "111222333",
+                            TeamId = 3,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Instagram = "playerIg",
+                            NIF = "12354678I",
+                            Name = "playerF1A1",
+                            Phone = "111222333",
+                            TeamId = 10,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Instagram = "playerIg",
+                            NIF = "12354678J",
+                            Name = "playerF1A2",
+                            Phone = "111222333",
+                            TeamId = 10,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Instagram = "playerIg",
+                            NIF = "12354678K",
+                            Name = "playerF2B1",
+                            Phone = "111222333",
+                            TeamId = 10,
+                            WantPics = true
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Instagram = "playerIg",
+                            NIF = "12354678ZL",
+                            Name = "playerF2B3",
+                            Phone = "111222333",
+                            TeamId = 10,
+                            WantPics = true
+                        });
                 });
 
             modelBuilder.Entity("Entities.Entities.Team", b =>
@@ -270,7 +430,178 @@ namespace Entities.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Teams", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            Classification_points = 0,
+                            Defeats = 2,
+                            EditionId = 1,
+                            GroupId = 1,
+                            Name = "teamMasc1A",
+                            Pay = false,
+                            Points_diff = -33,
+                            Wins = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 1,
+                            Classification_points = 3,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 1,
+                            Name = "teamMasc2A",
+                            Pay = false,
+                            Points_diff = 13,
+                            Wins = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 1,
+                            Classification_points = 3,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 1,
+                            Name = "teamMasc3A",
+                            Pay = false,
+                            Points_diff = 20,
+                            Wins = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 1,
+                            Classification_points = 0,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 2,
+                            Name = "teamMasc1B",
+                            Pay = false,
+                            Points_diff = 0,
+                            Wins = 0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = 1,
+                            Classification_points = 0,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 2,
+                            Name = "teamMasc2B",
+                            Pay = false,
+                            Points_diff = 0,
+                            Wins = 0
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryId = 1,
+                            Classification_points = 0,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 2,
+                            Name = "teamMasc3B",
+                            Pay = false,
+                            Points_diff = 0,
+                            Wins = 0
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 1,
+                            Classification_points = 0,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 3,
+                            Name = "teamMasc1C",
+                            Pay = false,
+                            Points_diff = 0,
+                            Wins = 0
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryId = 1,
+                            Classification_points = 0,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 3,
+                            Name = "teamMasc2C",
+                            Pay = false,
+                            Points_diff = 0,
+                            Wins = 0
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CategoryId = 1,
+                            Classification_points = 0,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 3,
+                            Name = "teamMasc3C",
+                            Pay = false,
+                            Points_diff = 0,
+                            Wins = 0
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CategoryId = 2,
+                            Classification_points = 0,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 4,
+                            Name = "teamFem1A",
+                            Pay = false,
+                            Points_diff = 0,
+                            Wins = 0
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CategoryId = 2,
+                            Classification_points = 0,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 4,
+                            Name = "teamFem2A",
+                            Pay = false,
+                            Points_diff = 0,
+                            Wins = 0
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CategoryId = 2,
+                            Classification_points = 0,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 5,
+                            Name = "teamFem1B",
+                            Pay = false,
+                            Points_diff = 0,
+                            Wins = 0
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CategoryId = 2,
+                            Classification_points = 0,
+                            Defeats = 0,
+                            EditionId = 1,
+                            GroupId = 5,
+                            Name = "teamFem2B",
+                            Pay = false,
+                            Points_diff = 0,
+                            Wins = 0
+                        });
                 });
 
             modelBuilder.Entity("Entities.Entities.User", b =>
@@ -303,7 +634,30 @@ namespace Entities.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Mail = "kingofthetower3x3@gmail.com",
+                            Name = "José Ramón",
+                            Role = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Mail = "jorapijo42@gmail.com",
+                            Name = "José Ramón",
+                            Role = "staff"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Mail = "jorapijo@gmail.com",
+                            Name = "José Ramón",
+                            Role = "base_user"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Entities.Game", b =>
