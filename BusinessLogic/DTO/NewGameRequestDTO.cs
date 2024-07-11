@@ -10,5 +10,6 @@ namespace BusinessLogic.DTO
         public string Team1Name { get; set; }
         public string Team2Name { get; set;}
         public int Court { get; set; }
+        public DateTime Schedule { get; set; }
     }
 }

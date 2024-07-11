@@ -13,5 +13,6 @@ namespace BusinessLogic.DTO
         public TeamRequestResponseDTO Team2 { get; set; }
         public int Team2Score { get; set; }
         public int Court { get; set; }
+        public DateTime Schedule { get; set; }
     }
 }

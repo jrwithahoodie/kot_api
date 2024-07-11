@@ -123,6 +123,7 @@ namespace BusinessLogic.Game
                     .Include(g => g.Team2)
                     .ThenInclude(t => t.Edition)
                     .Where(g => g.Court == court)
+                    .OrderBy(g => g.Schedule)
                     .ToList();
 
                 var gameListMapped = _mapper.Map<IEnumerable<GameInfoRequestResponseDTO>>(gameList);
@@ -237,7 +238,7 @@ namespace BusinessLogic.Game
                 newGame.Team1Id = existingTeam1.Id;
                 newGame.Team2Id = existingTeam2.Id;
 
-                newGame.Schedule = DateTime.Now;
+                newGame.Schedule = newGameData.Schedule;
                 newGame.StaffId = 2;
 
                 var result = _context.Games.Add(newGame);
