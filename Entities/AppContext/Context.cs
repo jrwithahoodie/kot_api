@@ -140,27 +140,27 @@ namespace Entities.AppContext
 
             modelBuilder.Entity<User>().HasData(new User[] { admin, staff, user });
             
-            modelBuilder.Entity<Group>().HasData(new Group[] { groupMascA, groupMascB, groupMascC, groupFemA, groupFemB });
+            // modelBuilder.Entity<Group>().HasData(new Group[] { groupMascA, groupMascB, groupMascC, groupFemA, groupFemB });
 
-            modelBuilder.Entity<Team>().HasData(new Team[]
-            {
-                teamMasc1A, teamMasc2A, teamMasc3A,
-                teamMasc1B, teamMasc2B, teamMasc3B,
-                teamMasc1C, teamMasc2C, teamMasc3C,
-                teamFem1A, teamFem2A,
-                teamFem1B, teamFem2B
-            });
+            // modelBuilder.Entity<Team>().HasData(new Team[]
+            // {
+            //     teamMasc1A, teamMasc2A, teamMasc3A,
+            //     teamMasc1B, teamMasc2B, teamMasc3B,
+            //     teamMasc1C, teamMasc2C, teamMasc3C,
+            //     teamFem1A, teamFem2A,
+            //     teamFem1B, teamFem2B
+            // });
             
-            modelBuilder.Entity<Player>().HasData(new Player[]
-            {
-                playerM1A1, playerM1A2, playerM1A3,
-                playerM2A1, playerM2A2, playerM2A3,
-                playerM3A1, playerM3A2, playerM3A3,
-                playerF1A1, playerF1A2,
-                playerF1B1, playerF1B3
-            });
+            // modelBuilder.Entity<Player>().HasData(new Player[]
+            // {
+            //     playerM1A1, playerM1A2, playerM1A3,
+            //     playerM2A1, playerM2A2, playerM2A3,
+            //     playerM3A1, playerM3A2, playerM3A3,
+            //     playerF1A1, playerF1A2,
+            //     playerF1B1, playerF1B3
+            // });
 
-            modelBuilder.Entity<Game>().HasData(new Game[] { game1, game2 });
+            // modelBuilder.Entity<Game>().HasData(new Game[] { game1, game2 });
 
             #endregion
         }

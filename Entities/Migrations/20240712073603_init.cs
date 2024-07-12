@@ -8,11 +8,38 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entities.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Editions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Editions", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Groups",
                 columns: table => new
@@ -32,24 +59,37 @@ namespace Entities.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Pay = table.Column<bool>(type: "bit", nullable: false),
                     Wins = table.Column<int>(type: "int", nullable: false),
                     Defeats = table.Column<int>(type: "int", nullable: false),
                     Points_diff = table.Column<int>(type: "int", nullable: false),
                     Classification_points = table.Column<int>(type: "int", nullable: false),
-                    GroupId = table.Column<int>(type: "int", nullable: false)
+                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    EditionId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Teams", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Teams_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Teams_Editions_EditionId",
+                        column: x => x.EditionId,
+                        principalTable: "Editions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Teams_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,7 +98,7 @@ namespace Entities.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NIF = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    NIF = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Instagram = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -73,7 +113,7 @@ namespace Entities.Migrations
                         column: x => x.TeamId,
                         principalTable: "Teams",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -137,15 +177,24 @@ namespace Entities.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Groups",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "MasculinoA" },
-                    { 2, "MasculinoB" },
-                    { 3, "MasculinoC" },
-                    { 4, "FemeninoA" },
-                    { 5, "FemeninoB" }
+                    { 1, "Male" },
+                    { 2, "Female" },
+                    { 3, "Mini" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Editions",
+                columns: new[] { "Id", "IsActive", "Name" },
+                values: new object[,]
+                {
+                    { 1, false, "27082022" },
+                    { 2, false, "26022023" },
+                    { 3, false, "05082023" },
+                    { 4, true, "27072024" }
                 });
 
             migrationBuilder.InsertData(
@@ -156,55 +205,6 @@ namespace Entities.Migrations
                     { 1, "kingofthetower3x3@gmail.com", "José Ramón", null, "admin" },
                     { 2, "jorapijo42@gmail.com", "José Ramón", null, "staff" },
                     { 3, "jorapijo@gmail.com", "José Ramón", null, "base_user" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Teams",
-                columns: new[] { "Id", "Category", "Classification_points", "Defeats", "GroupId", "Name", "Pay", "Points_diff", "Wins" },
-                values: new object[,]
-                {
-                    { 1, "Masculino", 0, 2, 1, "teamMasc1A", false, -33, 0 },
-                    { 2, "Masculino", 3, 0, 1, "teamMasc2A", false, 13, 1 },
-                    { 3, "Masculino", 3, 0, 1, "teamMasc3A", false, 20, 1 },
-                    { 4, "Masculino", 0, 0, 2, "teamMasc1B", false, 0, 0 },
-                    { 5, "Masculino", 0, 0, 2, "teamMasc2B", false, 0, 0 },
-                    { 6, "Masculino", 0, 0, 2, "teamMasc3B", false, 0, 0 },
-                    { 7, "Masculino", 0, 0, 3, "teamMasc1C", false, 0, 0 },
-                    { 8, "Masculino", 0, 0, 3, "teamMasc2C", false, 0, 0 },
-                    { 9, "Masculino", 0, 0, 3, "teamMasc3C", false, 0, 0 },
-                    { 10, "Femenino", 0, 0, 4, "teamFem1A", false, 0, 0 },
-                    { 11, "Femenino", 0, 0, 4, "teamFem2A", false, 0, 0 },
-                    { 12, "Femenino", 0, 0, 5, "teamFem1B", false, 0, 0 },
-                    { 13, "Femenino", 0, 0, 5, "teamFem2B", false, 0, 0 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Games",
-                columns: new[] { "Id", "Court", "Schedule", "Score1", "Score1Old", "Score2", "Score2Old", "StaffId", "Team1Id", "Team2Id" },
-                values: new object[,]
-                {
-                    { 1, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 0, 15, 0, 2, 1, 2 },
-                    { 2, 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 21, 0, 1, 0, 2, 3, 1 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Players",
-                columns: new[] { "Id", "Instagram", "NIF", "Name", "Phone", "TeamId", "WantPics" },
-                values: new object[,]
-                {
-                    { 1, "playerIg", "12354678Z", "playerM1A1", "111222333", 1, true },
-                    { 3, "playerIg", "12354678A", "playerM1A2", "111222333", 1, true },
-                    { 4, "playerIg", "12354678B", "playerM1A3", "111222333", 1, true },
-                    { 5, "playerIg", "12354678C", "playerM2A1", "111222333", 2, true },
-                    { 6, "playerIg", "12354678D", "playerM2A2", "111222333", 2, true },
-                    { 7, "playerIg", "12354678E", "playerM2A3", "111222333", 2, true },
-                    { 8, "playerIg", "12354678F", "playerM3A1", "111222333", 3, true },
-                    { 9, "playerIg", "12354678G", "playerM3A2", "111222333", 3, true },
-                    { 10, "playerIg", "12354678H", "playerM3A3", "111222333", 3, true },
-                    { 11, "playerIg", "12354678I", "playerF1A1", "111222333", 10, true },
-                    { 12, "playerIg", "12354678J", "playerF1A2", "111222333", 10, true },
-                    { 13, "playerIg", "12354678K", "playerF2B1", "111222333", 10, true },
-                    { 14, "playerIg", "12354678ZL", "playerF2B3", "111222333", 10, true }
                 });
 
             migrationBuilder.CreateIndex(
@@ -223,16 +223,19 @@ namespace Entities.Migrations
                 column: "Team2Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Players_NIF",
-                table: "Players",
-                column: "NIF",
-                unique: true,
-                filter: "[NIF] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Players_TeamId",
                 table: "Players",
                 column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Teams_CategoryId",
+                table: "Teams",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Teams_EditionId",
+                table: "Teams",
+                column: "EditionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Teams_GroupId",
@@ -265,6 +268,12 @@ namespace Entities.Migrations
 
             migrationBuilder.DropTable(
                 name: "Teams");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Editions");
 
             migrationBuilder.DropTable(
                 name: "Groups");
