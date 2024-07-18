@@ -16,7 +16,8 @@ namespace BusinessLogic.Game
         IEnumerable<GameInfoRequestResponseDTO> GetByGroup(string groupName, string editionName);
         IEnumerable<GameInfoRequestResponseDTO> GetByTeam(string teamName, string editionName);
         GameInfoRequestResponseDTO Post(NewGameRequestDTO newGameData);
-        GameInfoRequestResponseDTO Put(AlterGameResultRequestDTO gameResultInfo);
+        GameInfoRequestResponseDTO AlterGameResult(AlterGameResultRequestDTO gameResultInfo);
+        GameInfoRequestResponseDTO AlterGameInfo(AlterGameInfoRequestDTO gameNewInfo);
         GameInfoRequestResponseDTO Delete(int id);
     }
 }

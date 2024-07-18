@@ -257,7 +257,7 @@ namespace BusinessLogic.Game
             }
         }
 
-        public GameInfoRequestResponseDTO Put(AlterGameResultRequestDTO gameResultInfo)
+        public GameInfoRequestResponseDTO AlterGameResult(AlterGameResultRequestDTO gameResultInfo)
         {
             try
             {
@@ -300,6 +300,48 @@ namespace BusinessLogic.Game
                 _context.Update(existingGame);
                 _context.SaveChanges();
 
+                var gameMapped = _mapper.Map<GameInfoRequestResponseDTO>(existingGame);
+
+                return gameMapped;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+                throw;
+            }
+        }
+
+        public GameInfoRequestResponseDTO AlterGameInfo(AlterGameInfoRequestDTO gameNewInfo)
+        {
+            try
+            {
+                var existingGame = _context.Games
+                    .Include(g => g.Team1)
+                    .Include(g => g.Team2)
+                    .ThenInclude(t => t.Category)
+                    .Include(g => g.Team1)
+                    .ThenInclude(t => t.Edition)
+                    .Include(g => g.Team2)
+                    .ThenInclude(t => t.Category)
+                    .Include(g => g.Team2)
+                    .ThenInclude(t => t.Edition)
+                    .Where(g => g.Id == gameNewInfo.GameId)
+                    .ToList()
+                    .FirstOrDefault()
+                        ?? throw new Exception($"No existe ningún partido con estas características");
+                
+                if (existingGame.Schedule != gameNewInfo.NewSchedule)
+                {
+                    existingGame.Schedule = gameNewInfo.NewSchedule;
+                }
+
+                if (existingGame.Court !=  gameNewInfo.NewCourt)
+                {
+                    existingGame.Court = gameNewInfo.NewCourt;
+                }
+
+                _context.Update(existingGame);
+                _context.SaveChanges();
 
                 var gameMapped = _mapper.Map<GameInfoRequestResponseDTO>(existingGame);
 
@@ -335,6 +377,5 @@ namespace BusinessLogic.Game
                 throw;
             }
         }
-
     }
 }

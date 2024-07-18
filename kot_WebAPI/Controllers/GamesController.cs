@@ -156,11 +156,29 @@ namespace kot_WebAPI.Controllers
         /// Update game scoring result.
         /// </summary>
         [HttpPut("result")]
-        public IActionResult Put([FromBody] AlterGameResultRequestDTO gameResultInfo)
+        public IActionResult AlterGameResult([FromBody] AlterGameResultRequestDTO gameResultInfo)
         {
             try
             {
-                var gameUpdated = _gamesBll.Put(gameResultInfo);
+                var gameUpdated = _gamesBll.AlterGameResult(gameResultInfo);
+
+                return Ok(gameUpdated);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+        /// <summary>
+        /// Update game info.
+        /// </summary>
+        [HttpPut("info")]
+        public IActionResult AlterGameInfo([FromBody] AlterGameInfoRequestDTO gameNewInfo)
+        {
+            try
+            {
+                var gameUpdated = _gamesBll.AlterGameInfo(gameNewInfo);
 
                 return Ok(gameUpdated);
             }
